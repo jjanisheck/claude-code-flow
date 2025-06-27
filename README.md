@@ -1,70 +1,95 @@
-# 🌊 Claude-Flow v1.0.72: Advanced AI Agent Orchestration Platform
+# 🌊 Ollama-Flow: AI Agent Orchestration for Local Models
 
 <div align="center">
 
-[![🌟 Star on GitHub](https://img.shields.io/github/stars/ruvnet/claude-code-flow?style=for-the-badge&logo=github&color=gold)](https://github.com/ruvnet/claude-code-flow)
-[![📦 NPX Ready](https://img.shields.io/npm/v/claude-flow?style=for-the-badge&logo=npm&color=blue&label=v1.0.72)](https://www.npmjs.com/package/claude-flow)
-[![⚡ Claude Code](https://img.shields.io/badge/Claude%20Code-Ready-green?style=for-the-badge&logo=anthropic)](https://github.com/ruvnet/claude-code-flow)
-[![🦕 Multi-Runtime](https://img.shields.io/badge/Runtime-Node%20%7C%20Deno-blue?style=for-the-badge&logo=javascript)](https://github.com/ruvnet/claude-code-flow)
+[![🌟 Star on GitHub](https://img.shields.io/github/stars/ruvnet/ollama-flow?style=for-the-badge&logo=github&color=gold)](https://github.com/ruvnet/ollama-flow)
+[![📦 NPX Ready](https://img.shields.io/npm/v/ollama-flow?style=for-the-badge&logo=npm&color=blue&label=v1.0.72)](https://www.npmjs.com/package/ollama-flow)
+[![⚡ Ollama Ready](https://img.shields.io/badge/Ollama-Gemma%203n-green?style=for-the-badge&logo=ollama)](https://github.com/ruvnet/ollama-flow)
+[![🦕 Multi-Runtime](https://img.shields.io/badge/Runtime-Node%20%7C%20Deno-blue?style=for-the-badge&logo=javascript)](https://github.com/ruvnet/ollama-flow)
 [![⚡ TypeScript](https://img.shields.io/badge/TypeScript-Full%20Support-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 [![🛡️ MIT License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge&logo=opensourceinitiative)](https://opensource.org/licenses/MIT)
 
 </div>
 
-## 🎯 **Transform Your Development Workflow**
+## 🙏 **Based on Claude-Flow by Reuven**
 
-**Claude-Flow** is the ultimate orchestration platform that revolutionizes how you work with Claude Code. Coordinate **multiple AI agents** simultaneously, manage complex workflows, and build sophisticated applications with AI-powered development.
+**Ollama-Flow** is a fork of the brilliant [Claude-Flow](https://github.com/ruvnet/claude-code-flow) created by **Reuven (@ruvnet)**. This project adapts Reuven's genius orchestration platform to work with local Ollama/Gemma models instead of Claude API.
 
-> 🔥 **One command to rule them all**: `npx claude-flow@latest init --sparc` - Deploy a full AI agent coordination system in seconds!
+**All credit for the original architecture, SPARC methodology, and orchestration concepts goes to Reuven.** This adaptation simply replaces the Claude backend with Ollama/Gemma 3n for local AI execution.
+
+> 🌟 **Please star the original**: [Claude-Flow by Reuven](https://github.com/ruvnet/claude-code-flow) - The foundation that made this possible!
+
+## 🎯 **Transform Your Development Workflow with Local AI**
+
+**Ollama-Flow** brings Reuven's revolutionary AI agent orchestration platform to local models. Coordinate **multiple Gemma 3n agents** simultaneously, manage complex workflows, and build sophisticated applications with local AI-powered development.
+
+> 🔥 **One command to rule them all**: `npx ollama-flow@latest init --sparc` - Deploy a full local AI agent coordination system in seconds!
 
 
-## 🚀 **What's New in v1.0.72**
+## 🚀 **What's New in Ollama-Flow Adaptation**
 
-### 🎯 **Claude Code Settings Optimization**
-- **✅ Auto-Settings Creation**: `init` command now creates `.claude/settings.json` with automation-optimized settings
-- **✅ Extended Timeouts**: 5-minute default, 10-minute max for Bash commands (300s/600s)
-- **✅ Full Tool Permissions**: All tools allowed with wildcards `(*)` for complete automation
-- **✅ Large Output Support**: 500KB character limit for handling extensive outputs
-- **✅ Automation Features**: Parallel execution, batch operations, and auto-save to memory enabled
+### 🎯 **Local AI Integration**
+- **✅ Ollama Backend**: Complete replacement of Claude API with local Ollama/Gemma 3n models
+- **✅ Model Selection**: Support for `gemma3n:e2b` (2B effective) and `gemma3n:e4b` (4B effective) models  
+- **✅ Local Execution**: No API keys required - everything runs locally with Ollama
+- **✅ Extended Context**: Configurable context lengths up to 32K tokens for large projects
+- **✅ Temperature Control**: Fine-tuned generation settings for different development tasks
 
-### 🔧 **Enhanced SPARC Integration**
-- **✅ Better Prompts**: SPARC and swarm prompts now emphasize batch tools and memory usage
-- **✅ Memory First**: All modes now save to memory after each step for better coordination
-- **✅ Agent Clarity**: Swarm prompts specify exact agent counts and immediate execution
-- **✅ Task Tracking**: Added visual progress indicators and task format to all prompts
-- **✅ Action-Oriented**: Changed from planning to immediate execution language
+### 🔧 **Enhanced SPARC Integration** (Reuven's Original Design)
+- **✅ SPARC Methodology**: Preserves Reuven's brilliant 17-mode SPARC system
+- **✅ Gemma Prompts**: Optimized prompts specifically designed for Gemma 3n models
+- **✅ Memory Coordination**: Maintains original memory-first approach for agent coordination
+- **✅ Agent Orchestration**: Full preservation of Reuven's multi-agent swarm architecture
+- **✅ Local Processing**: All SPARC modes now execute via local Ollama instead of Claude API
 
-### 🚀 **Developer Experience**
-- **✅ Zero Configuration**: Optimal settings applied automatically on init
-- **✅ Long Operations**: Support for extended running tasks without timeouts
-- **✅ Better Reliability**: Auto-accept for Claude Code warnings in swarm mode
-- **✅ Version Consistency**: All components updated to v1.0.72
+### 🚀 **Developer Experience** 
+- **✅ Zero API Costs**: Completely local execution with no external API dependencies
+- **✅ Privacy First**: All code and data stays on your machine
+- **✅ Offline Capable**: Works without internet after initial model download
+- **✅ Ollama Integration**: Seamless integration with Ollama's model management
+- **✅ Reuven's UX**: Preserves the excellent developer experience from Claude-Flow
 
 ---
 
 ## ⚡ **Quick Start** 
 
+### 🛠️ **Prerequisites**
+```bash
+# Install Ollama
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# Download Gemma 3n model
+ollama pull gemma3n:e2b
+
+# Start Ollama server
+ollama serve
+```
+
 ### 🚀 **Instant Setup**
 ```bash
 # Install and initialize with SPARC development environment
-npx claude-flow@latest init --sparc
+npx ollama-flow@latest init --sparc
 
 # Use the local wrapper (created by init)
-./claude-flow start --ui --port 3000
+./ollama-flow start --ui --port 3000
 
-# Run SPARC commands
-./claude-flow sparc "build a REST API"
+# Run SPARC commands with local Gemma
+./ollama-flow sparc "build a REST API"
 ```
 
-### 🎛️ **SPARC Development Modes** (17 Specialized Agents)
+### 🎛️ **SPARC Development Modes** (Reuven's 17 Specialized Agents)
 ```bash
 # List all available SPARC modes
-./claude-flow sparc modes
+./ollama-flow sparc modes
 
-# Run specific development workflows
-./claude-flow sparc run coder "implement user authentication"
-./claude-flow sparc run architect "design microservice architecture"
-./claude-flow sparc tdd "create test suite for API"
+# Run specific development workflows with Gemma
+./ollama-flow sparc run coder "implement user authentication"
+./ollama-flow sparc run architect "design microservice architecture"  
+./ollama-flow sparc tdd "create test suite for API"
+
+# Use different Gemma models for different tasks
+./ollama-flow ollama spawn "complex architecture task" --model gemma3n:e4b
+./ollama-flow ollama spawn "quick code fix" --model gemma3n:e2b
 ```
 
 ## 🏗️ **Core Features**
@@ -94,41 +119,41 @@ npx claude-flow@latest init --sparc
 ### **Method 1: Quick Start with NPX (Recommended)**
 ```bash
 # Initialize with full SPARC environment
-npx claude-flow@latest init --sparc
+npx ollama-flow@latest init --sparc
 
 # This creates:
-# ✓ Local ./claude-flow wrapper script
-# ✓ .claude/ directory with configuration
-# ✓ CLAUDE.md (project instructions for Claude Code)
+# ✓ Local ./ollama-flow wrapper script
+# ✓ .ollama/ directory with configuration
+# ✓ OLLAMA.md (project instructions for Ollama/Gemma)
 # ✓ .roomodes (17 pre-configured SPARC modes)
 # ✓ Swarm command documentation
 
 # Start using immediately
-./claude-flow start --ui --port 3000
+./ollama-flow start --ui --port 3000
 ```
 
 ### **Method 2: Global Installation**
 ```bash
 # Install globally
-npm install -g claude-flow
+npm install -g ollama-flow
 
 # Initialize anywhere
-claude-flow init --sparc
+ollama-flow init --sparc
 
 # Use directly
-claude-flow start --ui
+ollama-flow start --ui
 ```
 
 ### **Method 3: Local Project Installation**
 ```bash
 # Add to project
-npm install claude-flow --save-dev
+npm install ollama-flow --save-dev
 
 # Initialize
-npx claude-flow init --sparc
+npx ollama-flow init --sparc
 
 # Use with local wrapper
-./claude-flow start --ui
+./ollama-flow start --ui
 ```
 
 ---
@@ -138,18 +163,18 @@ npx claude-flow init --sparc
 ### 🚀 **Basic Operations**
 ```bash
 # Check system status
-./claude-flow status
+./ollama-flow status
 
 # Start orchestration with Web UI
-./claude-flow start --ui --port 3000
+./ollama-flow start --ui --port 3000
 
 # Check MCP server status
-./claude-flow mcp status
+./ollama-flow mcp status
 
 # Manage agents
-./claude-flow agent spawn researcher --name "DataBot"
-./claude-flow agent info agent-123
-./claude-flow agent terminate agent-123
+./ollama-flow agent spawn researcher --name "DataBot"
+./ollama-flow agent info agent-123
+./ollama-flow agent terminate agent-123
 ```
 
 ### 🔥 **Advanced Workflows**
@@ -157,7 +182,7 @@ npx claude-flow init --sparc
 #### **Multi-Agent Development**
 ```bash
 # Deploy swarm for full-stack development
-./claude-flow swarm "Build e-commerce platform" \
+./ollama-flow swarm "Build e-commerce platform" \
   --strategy development \
   --max-agents 5 \
   --parallel \
@@ -165,33 +190,33 @@ npx claude-flow init --sparc
 
 # BatchTool parallel development
 batchtool run --parallel \
-  "./claude-flow sparc run architect 'design user auth'" \
-  "./claude-flow sparc run code 'implement login API'" \
-  "./claude-flow sparc run tdd 'create auth tests'" \
-  "./claude-flow sparc run security-review 'audit auth flow'"
+  "./ollama-flow sparc run architect 'design user auth'" \
+  "./ollama-flow sparc run code 'implement login API'" \
+  "./ollama-flow sparc run tdd 'create auth tests'" \
+  "./ollama-flow sparc run security-review 'audit auth flow'"
 ```
 
 #### **SPARC Development Modes**
 ```bash
 # Complete development workflow
-./claude-flow sparc run ask "research best practices for microservices"
-./claude-flow sparc run architect "design scalable architecture"
-./claude-flow sparc run code "implement user service"
-./claude-flow sparc run tdd "create comprehensive test suite"
-./claude-flow sparc run integration "integrate all services"
-./claude-flow sparc run devops "setup CI/CD pipeline"
+./ollama-flow sparc run ask "research best practices for microservices"
+./ollama-flow sparc run architect "design scalable architecture"
+./ollama-flow sparc run code "implement user service"
+./ollama-flow sparc run tdd "create comprehensive test suite"
+./ollama-flow sparc run integration "integrate all services"
+./ollama-flow sparc run devops "setup CI/CD pipeline"
 ```
 
 #### **Memory & Coordination**
 ```bash
 # Store and query project knowledge
-./claude-flow memory store requirements "User auth with JWT"
-./claude-flow memory store architecture "Microservice design patterns"
-./claude-flow memory query auth
+./ollama-flow memory store requirements "User auth with JWT"
+./ollama-flow memory store architecture "Microservice design patterns"
+./ollama-flow memory query auth
 
 # Task coordination
-./claude-flow task create research "Market analysis for AI tools"
-./claude-flow task workflow examples/development-pipeline.json
+./ollama-flow task create research "Market analysis for AI tools"
+./ollama-flow task workflow examples/development-pipeline.json
 ```
 
 ---
@@ -201,39 +226,39 @@ batchtool run --parallel \
 ### **Core Commands**
 | Command | Description | Example |
 |---------|-------------|---------|
-| `init` | Initialize project with Claude integration | `./claude-flow init --sparc` |
-| `start` | Start orchestration system | `./claude-flow start --ui` |
-| `status` | Show system health and metrics | `./claude-flow status` |
-| `agent` | Manage AI agents and hierarchies | `./claude-flow agent spawn researcher` |
-| `swarm` | Advanced multi-agent coordination | `./claude-flow swarm "Build API" --parallel` |
+| `init` | Initialize project with Ollama/Gemma integration | `./ollama-flow init --sparc` |
+| `start` | Start orchestration system | `./ollama-flow start --ui` |
+| `status` | Show system health and metrics | `./ollama-flow status` |
+| `agent` | Manage AI agents and hierarchies | `./ollama-flow agent spawn researcher` |
+| `swarm` | Advanced multi-agent coordination | `./ollama-flow swarm "Build API" --parallel` |
 
 ### **SPARC Development Modes**
 | Mode | Purpose | Example |
 |------|---------|---------|
-| `architect` | System design and architecture | `./claude-flow sparc run architect "design API"` |
-| `code` | Code development and implementation | `./claude-flow sparc run code "user authentication"` |
-| `tdd` | Test-driven development | `./claude-flow sparc run tdd "payment system"` |
-| `security-review` | Security auditing and analysis | `./claude-flow sparc run security-review "auth flow"` |
-| `integration` | System integration and testing | `./claude-flow sparc run integration "microservices"` |
-| `devops` | Deployment and CI/CD | `./claude-flow sparc run devops "k8s deployment"` |
+| `architect` | System design and architecture | `./ollama-flow sparc run architect "design API"` |
+| `code` | Code development and implementation | `./ollama-flow sparc run code "user authentication"` |
+| `tdd` | Test-driven development | `./ollama-flow sparc run tdd "payment system"` |
+| `security-review` | Security auditing and analysis | `./ollama-flow sparc run security-review "auth flow"` |
+| `integration` | System integration and testing | `./ollama-flow sparc run integration "microservices"` |
+| `devops` | Deployment and CI/CD | `./ollama-flow sparc run devops "k8s deployment"` |
 
 ### **Memory & Coordination**
 | Command | Description | Example |
 |---------|-------------|---------|
-| `memory store` | Store information in knowledge bank | `./claude-flow memory store key "value"` |
-| `memory query` | Search stored information | `./claude-flow memory query "authentication"` |
-| `task create` | Create and manage tasks | `./claude-flow task create research "AI trends"` |
-| `monitor` | Real-time system monitoring | `./claude-flow monitor --dashboard` |
+| `memory store` | Store information in knowledge bank | `./ollama-flow memory store key "value"` |
+| `memory query` | Search stored information | `./ollama-flow memory query "authentication"` |
+| `task create` | Create and manage tasks | `./ollama-flow task create research "AI trends"` |
+| `monitor` | Real-time system monitoring | `./ollama-flow monitor --dashboard` |
 
 ### **Enterprise Commands**
 | Command | Description | Example |
 |---------|-------------|---------|
-| `project` | Project lifecycle management | `./claude-flow project create "API Project" --type web-app` |
-| `deploy` | Deployment automation & strategies | `./claude-flow deploy create "v1.2.0" --strategy blue-green` |
-| `cloud` | Multi-cloud infrastructure management | `./claude-flow cloud resources create "web-server" compute` |
-| `security` | Security scanning & compliance | `./claude-flow security scan "Vulnerability Check" ./src` |
-| `analytics` | Performance analytics & insights | `./claude-flow analytics insights --timerange 7d` |
-| `audit` | Enterprise audit logging | `./claude-flow audit report compliance --framework SOC2` |
+| `project` | Project lifecycle management | `./ollama-flow project create "API Project" --type web-app` |
+| `deploy` | Deployment automation & strategies | `./ollama-flow deploy create "v1.2.0" --strategy blue-green` |
+| `cloud` | Multi-cloud infrastructure management | `./ollama-flow cloud resources create "web-server" compute` |
+| `security` | Security scanning & compliance | `./ollama-flow security scan "Vulnerability Check" ./src` |
+| `analytics` | Performance analytics & insights | `./ollama-flow analytics insights --timerange 7d` |
+| `audit` | Enterprise audit logging | `./ollama-flow audit report compliance --framework SOC2` |
 
 ---
 
@@ -251,7 +276,7 @@ batchtool run --parallel \
 ├─────────────────────────────────────────────────────────┤
 │         Terminal Pool & Resource Management             │
 ├─────────────────────────────────────────────────────────┤
-│              Claude Code Integration Layer              │
+│              Ollama/Gemma Integration Layer             │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -285,8 +310,8 @@ npm run typecheck
 ```
 
 ### **Quality Metrics (v1.0.72)**
-- **✅ Project-Focused**: CLAUDE.md explicitly guides building user applications
-- **✅ Clear Instructions**: No confusion about modifying claude-flow itself
+- **✅ Project-Focused**: OLLAMA.md explicitly guides building user applications
+- **✅ Clear Instructions**: No confusion about modifying ollama-flow itself
 - **✅ Real Examples**: All documentation shows building actual applications
 - **✅ NPM Publishing**: Fully compatible with npx and global installation
 - **✅ Cross-Platform**: Windows, Mac, and Linux support
@@ -322,8 +347,8 @@ We welcome contributions! Here's how to get started:
 ### **Development Setup**
 ```bash
 # Clone the repository
-git clone https://github.com/ruvnet/claude-code-flow.git
-cd claude-code-flow
+git clone https://github.com/ruvnet/ollama-flow.git
+cd ollama-flow
 
 # Install dependencies
 npm install
@@ -354,10 +379,12 @@ MIT License - see [LICENSE](./LICENSE) for details.
 
 ## 🎉 **Acknowledgments**
 
-- **Anthropic**: For the amazing Claude AI that powers this platform
+- **🌟 Reuven (@ruvnet)**: Creator of the original [Claude-Flow](https://github.com/ruvnet/claude-code-flow) - the genius orchestration platform that this project is based on. All core concepts, SPARC methodology, and architectural brilliance belong to Reuven.
+- **Ollama Team**: For the amazing local model infrastructure that makes this adaptation possible
+- **Google**: For the powerful Gemma 3n models that provide local AI capabilities
 - **Node.js Team**: For the excellent JavaScript runtime
 - **Open Source Community**: For contributions and feedback
-- **SPARC Methodology**: For the structured development approach
+- **SPARC Methodology**: Reuven's structured development approach that revolutionizes AI-assisted coding
 
 ---
 
@@ -366,17 +393,17 @@ MIT License - see [LICENSE](./LICENSE) for details.
 ### **🚀 Ready to transform your development workflow?**
 
 ```bash
-npx claude-flow@latest init --sparc
+npx ollama-flow@latest init --sparc
 ```
 
-**Join thousands of developers already using Claude-Flow!**
+**Join thousands of developers already using Ollama-Flow!**
 
-[![GitHub](https://img.shields.io/badge/GitHub-ruvnet/claude--code--flow-blue?style=for-the-badge&logo=github)](https://github.com/ruvnet/claude-code-flow)
-[![NPM](https://img.shields.io/badge/NPM-claude--flow-red?style=for-the-badge&logo=npm)](https://www.npmjs.com/package/claude-flow)
-[![Discord](https://img.shields.io/badge/Discord-Join%20Community-purple?style=for-the-badge&logo=discord)](https://discord.gg/claude-flow)
+[![GitHub](https://img.shields.io/badge/GitHub-ruvnet/ollama--flow-blue?style=for-the-badge&logo=github)](https://github.com/ruvnet/ollama-flow)
+[![NPM](https://img.shields.io/badge/NPM-ollama--flow-red?style=for-the-badge&logo=npm)](https://www.npmjs.com/package/ollama-flow)
+[![Discord](https://img.shields.io/badge/Discord-Join%20Community-purple?style=for-the-badge&logo=discord)](https://discord.gg/ollama-flow)
 
 ---
 
-**Built with ❤️ by [rUv](https://github.com/ruvnet) | Powered by Claude AI**
+**Based on Claude-Flow by [rUv](https://github.com/ruvnet) | Powered by Ollama & Gemma 3n**
 
 </div>
