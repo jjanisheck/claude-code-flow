@@ -54,7 +54,7 @@ export function setupCommands(cli: CLI): void {
   // Init command
   cli.command({
     name: "init",
-    description: "Initialize Claude Code integration files",
+    description: "Initialize Ollama Code integration files",
     options: [
       {
         name: "force",
@@ -71,13 +71,13 @@ export function setupCommands(cli: CLI): void {
     ],
     action: async (ctx: CommandContext) => {
       try {
-        success("Initializing Claude Code integration files...");
+        success("Initializing Ollama Code integration files...");
         
         const force = ctx.flags.force as boolean || ctx.flags.f as boolean;
         const minimal = ctx.flags.minimal as boolean || ctx.flags.m as boolean;
         
         // Check if files already exist
-        const files = ["CLAUDE.md", "memory-bank.md", "coordination.md"];
+        const files = ["OLLAMA.md", "memory-bank.md", "coordination.md"];
         const existingFiles = [];
         
         for (const file of files) {
@@ -94,11 +94,11 @@ export function setupCommands(cli: CLI): void {
           return;
         }
         
-        // Create CLAUDE.md
-        const claudeMd = minimal ? createMinimalClaudeMd() : createFullClaudeMd();
+        // Create OLLAMA.md
+        const ollamaMd = minimal ? createMinimalOllamaMd() : createFullOllamaMd();
         const { writeFile } = await import("fs/promises");
-        await writeFile("CLAUDE.md", claudeMd);
-        console.log("  ✓ Created CLAUDE.md");
+        await writeFile("OLLAMA.md", ollamaMd);
+        console.log("  ✓ Created OLLAMA.md");
         
         // Create memory-bank.md  
         const memoryBankMd = minimal ? createMinimalMemoryBankMd() : createFullMemoryBankMd();
@@ -153,15 +153,15 @@ export function setupCommands(cli: CLI): void {
           tasks: [],
           lastUpdated: Date.now()
         };
-        await writeFile("memory/claude-flow-data.json", JSON.stringify(initialData, null, 2));
-        console.log("  ✓ Created memory/claude-flow-data.json (persistence database)");
+        await writeFile("memory/ollama-flow-data.json", JSON.stringify(initialData, null, 2));
+        console.log("  ✓ Created memory/ollama-flow-data.json (persistence database)");
         
-        success("Claude Code integration files initialized successfully!");
+        success("Ollama Code integration files initialized successfully!");
         console.log("\nNext steps:");
         console.log("1. Review and customize the generated files for your project");
-        console.log("2. Run 'npx claude-flow start' to begin the orchestration system");
-        console.log("3. Use 'claude --dangerously-skip-permissions' for unattended operation");
-        console.log("\nNote: Persistence database initialized at memory/claude-flow-data.json");
+        console.log("2. Run 'npx ollama-flow start' to begin the orchestration system");
+        console.log("3. Use 'ollama --dangerously-skip-permissions' for unattended operation");
+        console.log("\nNote: Persistence database initialized at memory/ollama-flow-data.json");
         
       } catch (err) {
         error(`Failed to initialize files: ${(err as Error).message}`);
@@ -189,7 +189,7 @@ export function setupCommands(cli: CLI): void {
       },
     ],
     action: async (ctx: CommandContext) => {
-      success("Starting Claude-Flow orchestration system...");
+      success("Starting Ollama-Flow orchestration system...");
       
       try {
         const orch = await getOrchestrator();
@@ -358,7 +358,7 @@ export function setupCommands(cli: CLI): void {
               warning("Workflow execution would start here (not yet implemented)");
               // TODO: Implement workflow execution
             } else {
-              info("To execute this workflow, ensure Claude-Flow is running");
+              info("To execute this workflow, ensure Ollama-Flow is running");
             }
           } catch (err) {
             error(`Failed to load workflow: ${(err as Error).message}`);
@@ -415,7 +415,7 @@ export function setupCommands(cli: CLI): void {
             
             warning("Enhanced agent management is available!");
             console.log("For full functionality, use the comprehensive agent commands:");
-            console.log(`  - claude-flow agent ${subcommand} ${ctx.args.slice(1).join(' ')}`);
+            console.log(`  - ollama-flow agent ${subcommand} ${ctx.args.slice(1).join(' ')}`);
             console.log("  - Enhanced features: pools, health monitoring, resource management");
             console.log("  - Interactive configuration and detailed metrics");
             break;
@@ -439,7 +439,7 @@ export function setupCommands(cli: CLI): void {
             console.log("  ✨ Interactive configuration");
             console.log("  ✨ Memory integration for coordination");
             console.log("");
-            console.log("For detailed help, use: claude-flow agent <command> --help");
+            console.log("For detailed help, use: ollama-flow agent <command> --help");
             break;
           }
         }
@@ -525,7 +525,7 @@ export function setupCommands(cli: CLI): void {
       
       // Mock the enhanced status command action
       console.log(colors.cyan('🔍 Enhanced Status Command'));
-      console.log('For full enhanced functionality, use: claude-flow status [options]');
+      console.log('For full enhanced functionality, use: ollama-flow status [options]');
       console.log('Available options: --watch, --interval, --component, --json, --detailed, --health-check, --history');
       
       // Fallback to basic status
@@ -537,7 +537,7 @@ export function setupCommands(cli: CLI): void {
         const { access } = await import("fs/promises");
         const isRunning = await access("orchestrator.log").then(() => true).catch(() => false);
         
-        success("Claude-Flow System Status:");
+        success("Ollama-Flow System Status:");
         console.log(`🟢 Status: ${isRunning ? 'Running' : 'Stopped'}`);
         console.log(`🤖 Agents: ${stats.activeAgents} active (${stats.totalAgents} total)`);
         console.log(`📋 Tasks: ${stats.pendingTasks} in queue (${stats.totalTasks} total)`);
@@ -556,7 +556,7 @@ export function setupCommands(cli: CLI): void {
         
         if (options.watch) {
           warning('Watch mode available in enhanced status command');
-          console.log('Use: claude-flow status --watch');
+          console.log('Use: ollama-flow status --watch');
         }
         
       } catch (err) {
@@ -594,7 +594,7 @@ export function setupCommands(cli: CLI): void {
           const { access } = await import("fs/promises");
           const isRunning = await access("orchestrator.log").then(() => true).catch(() => false);
           
-          success("Claude-Flow System Status:");
+          success("Ollama-Flow System Status:");
           console.log(`🟢 Status: ${isRunning ? 'Running' : 'Stopped'}`);
           console.log(`🤖 Agents: ${stats.activeAgents} active (${stats.totalAgents} total)`);
           console.log(`📋 Tasks: ${stats.pendingTasks} in queue (${stats.totalTasks} total)`);
@@ -635,14 +635,14 @@ export function setupCommands(cli: CLI): void {
             const health = await orch.healthCheck();
             
             if (!health.healthy) {
-              warning("Orchestrator is not running. Start it first with 'claude-flow start'");
+              warning("Orchestrator is not running. Start it first with 'ollama-flow start'");
               return;
             }
             
             success(`MCP server is running as part of the orchestration system`);
             console.log(`📡 Default address: http://${host}:${port}`);
             console.log(`🔧 Available tools: Research, Code, Terminal, Memory`);
-            console.log(`📚 Use 'claude-flow mcp tools' to see all available tools`);
+            console.log(`📚 Use 'ollama-flow mcp tools' to see all available tools`);
           } catch (err) {
             error(`Failed to check MCP server: ${(err as Error).message}`);
           }
@@ -657,7 +657,7 @@ export function setupCommands(cli: CLI): void {
             if (!health.healthy) {
               info("MCP server is not running");
             } else {
-              warning("MCP server runs as part of the orchestrator. Use 'claude-flow stop' to stop the entire system");
+              warning("MCP server runs as part of the orchestrator. Use 'ollama-flow stop' to stop the entire system");
             }
           } catch (err) {
             error(`Failed to check MCP server: ${(err as Error).message}`);
@@ -730,7 +730,7 @@ export function setupCommands(cli: CLI): void {
         
         case "restart": {
           try {
-            warning("MCP server runs as part of the orchestrator. Use 'claude-flow stop' then 'claude-flow start' to restart the entire system");
+            warning("MCP server runs as part of the orchestrator. Use 'ollama-flow stop' then 'ollama-flow start' to restart the entire system");
           } catch (err) {
             error(`Failed to restart MCP server: ${(err as Error).message}`);
           }
@@ -746,7 +746,7 @@ export function setupCommands(cli: CLI): void {
             console.log("2024-01-10 10:00:00 [INFO] MCP server started on localhost:3000");
             console.log("2024-01-10 10:00:01 [INFO] Tools registered: 12");
             console.log("2024-01-10 10:00:02 [INFO] Authentication disabled");
-            console.log("2024-01-10 10:01:00 [INFO] Client connected: claude-desktop");
+            console.log("2024-01-10 10:01:00 [INFO] Client connected: ollama-desktop");
             console.log("2024-01-10 10:01:05 [INFO] Tool called: web_search");
             console.log("2024-01-10 10:01:10 [INFO] Tool response sent successfully");
           } catch (err) {
@@ -921,11 +921,11 @@ export function setupCommands(cli: CLI): void {
     },
   });
 
-  // Claude command
+  // Ollama command
   cli.command({
-    name: "claude",
-    description: "Spawn Claude instances with specific configurations",
-    aliases: ["cl"],
+    name: "ollama",
+    description: "Spawn Ollama/Gemma instances with specific configurations",
+    aliases: ["ol"],
     options: [
       {
         name: "tools",
@@ -1003,7 +1003,7 @@ export function setupCommands(cli: CLI): void {
           
           const task = ctx.args.slice(1, taskEndIndex).join(" ");
           if (!task) {
-            error("Usage: claude spawn <task description>");
+            error("Usage: ollama spawn <task description>");
             break;
           }
           
@@ -1019,35 +1019,35 @@ export function setupCommands(cli: CLI): void {
               tools += ",WebFetchTool";
             }
             
-            const instanceId = `claude-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            const instanceId = `ollama-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
             
-            // Build enhanced task with Claude-Flow guidance
-            let enhancedTask = `# Claude-Flow Enhanced Task
+            // Build enhanced task with Ollama-Flow guidance
+            let enhancedTask = `# Ollama-Flow Enhanced Task
 
 ## Your Task
 ${task}
 
-## Claude-Flow System Context
+## Ollama-Flow System Context
 
-You are running within the Claude-Flow orchestration system, which provides powerful features for complex task management:
+You are running within the Ollama-Flow orchestration system, which provides powerful features for complex task management:
 
 ### Available Features
 
 1. **Memory Bank** (Always Available)
-   - Store data: \`npx claude-flow memory store <key> <value>\` - Save important data, findings, or progress
-   - Retrieve data: \`npx claude-flow memory query <key>\` - Access previously stored information
-   - Check status: \`npx claude-flow status\` - View current system/task status
-   - List agents: \`npx claude-flow agent list\` - See active agents
-   - Memory persists across Claude instances in the same namespace
+   - Store data: \`npx ollama-flow memory store <key> <value>\` - Save important data, findings, or progress
+   - Retrieve data: \`npx ollama-flow memory query <key>\` - Access previously stored information
+   - Check status: \`npx ollama-flow status\` - View current system/task status
+   - List agents: \`npx ollama-flow agent list\` - See active agents
+   - Memory persists across Ollama instances in the same namespace
 
 2. **Tool Access**
    - You have access to these tools: ${tools}`;
 
             if (ctx.flags.parallel) {
               enhancedTask += `
-   - **Parallel Execution Enabled**: Use \`npx claude-flow agent spawn <type> --name <name>\` to spawn sub-agents
-   - Create tasks: \`npx claude-flow task create <type> "<description>"\`
-   - Assign tasks: \`npx claude-flow task assign <task-id> <agent-id>\`
+   - **Parallel Execution Enabled**: Use \`npx ollama-flow agent spawn <type> --name <name>\` to spawn sub-agents
+   - Create tasks: \`npx ollama-flow task create <type> "<description>"\`
+   - Assign tasks: \`npx ollama-flow task assign <task-id> <agent-id>\`
    - Break down complex tasks and delegate to specialized agents`;
             }
 
@@ -1061,24 +1061,24 @@ You are running within the Claude-Flow orchestration system, which provides powe
 ### Workflow Guidelines
 
 1. **Before Starting**:
-   - Check memory: \`npx claude-flow memory query previous_work\`
-   - Check system status: \`npx claude-flow status\`
-   - List active agents: \`npx claude-flow agent list\`
-   - List active tasks: \`npx claude-flow task list\`
+   - Check memory: \`npx ollama-flow memory query previous_work\`
+   - Check system status: \`npx ollama-flow status\`
+   - List active agents: \`npx ollama-flow agent list\`
+   - List active tasks: \`npx ollama-flow task list\`
 
 2. **During Execution**:
-   - Store findings: \`npx claude-flow memory store findings "your data here"\`
-   - Save checkpoints: \`npx claude-flow memory store progress_${task.replace(/\s+/g, '_')} "current status"\`
-   ${ctx.flags.parallel ? '- Spawn agents: `npx claude-flow agent spawn researcher --name "research-agent"`' : ''}
-   ${ctx.flags.parallel ? '- Create tasks: `npx claude-flow task create implementation "implement feature X"`' : ''}
+   - Store findings: \`npx ollama-flow memory store findings "your data here"\`
+   - Save checkpoints: \`npx ollama-flow memory store progress_${task.replace(/\s+/g, '_')} "current status"\`
+   ${ctx.flags.parallel ? '- Spawn agents: `npx ollama-flow agent spawn researcher --name "research-agent"`' : ''}
+   ${ctx.flags.parallel ? '- Create tasks: `npx ollama-flow task create implementation "implement feature X"`' : ''}
 
 3. **Best Practices**:
-   - Use the Bash tool to run \`npx claude-flow\` commands
+   - Use the Bash tool to run \`npx ollama-flow\` commands
    - Store data as JSON strings for complex structures
    - Query memory before starting to check for existing work
    - Use descriptive keys for memory storage
    ${ctx.flags.parallel ? '- Coordinate with other agents through shared memory' : ''}
-   ${ctx.flags.research ? '- Store research findings: `npx claude-flow memory store research_findings "data"`' : ''}
+   ${ctx.flags.research ? '- Store research findings: `npx ollama-flow memory store research_findings "data"`' : ''}
 
 ## Configuration
 - Instance ID: ${instanceId}
@@ -1088,44 +1088,44 @@ You are running within the Claude-Flow orchestration system, which provides powe
 
 ## Example Commands
 
-To interact with Claude-Flow, use the Bash tool:
+To interact with Ollama-Flow, use the Bash tool:
 
 \`\`\`bash
 # Check for previous work
-Bash("npx claude-flow memory query previous_work")
+Bash("npx ollama-flow memory query previous_work")
 
 # Store your findings
-Bash("npx claude-flow memory store analysis_results 'Found 3 critical issues...'")
+Bash("npx ollama-flow memory store analysis_results 'Found 3 critical issues...'")
 
 # Check system status
-Bash("npx claude-flow status")
+Bash("npx ollama-flow status")
 
 # Create and assign tasks (when --parallel is enabled)
-Bash("npx claude-flow task create research 'Research authentication methods'")
-Bash("npx claude-flow agent spawn researcher --name auth-researcher")
+Bash("npx ollama-flow task create research 'Research authentication methods'")
+Bash("npx ollama-flow agent spawn researcher --name auth-researcher")
 \`\`\`
 
 Now, please proceed with the task: ${task}`;
             
-            // Build Claude command with enhanced task
-            const claudeCmd = ["claude", enhancedTask];
-            claudeCmd.push("--allowedTools", tools);
+            // Build Ollama command with enhanced task
+            const ollamaCmd = ["ollama", enhancedTask];
+            ollamaCmd.push("--allowedTools", tools);
             
             if (ctx.flags.noPermissions || ctx.flags["skip-permissions"]) {
-              claudeCmd.push("--dangerously-skip-permissions");
+              ollamaCmd.push("--dangerously-skip-permissions");
             }
             
             if (ctx.flags.config) {
-              claudeCmd.push("--mcp-config", ctx.flags.config as string);
+              ollamaCmd.push("--mcp-config", ctx.flags.config as string);
             }
             
             if (ctx.flags.verbose) {
-              claudeCmd.push("--verbose");
+              ollamaCmd.push("--verbose");
             }
             
             if (ctx.flags.dryRun || ctx.flags["dry-run"] || ctx.flags.d) {
               warning("DRY RUN - Would execute:");
-              console.log(`Command: claude "<enhanced task with guidance>" --allowedTools ${tools}`);
+              console.log(`Command: ollama "<enhanced task with guidance>" --allowedTools ${tools}`);
               console.log(`Instance ID: ${instanceId}`);
               console.log(`Original Task: ${task}`);
               console.log(`Tools: ${tools}`);
@@ -1133,19 +1133,19 @@ Now, please proceed with the task: ${task}`;
               console.log(`Coverage: ${ctx.flags.coverage || 80}%`);
               console.log(`Commit: ${ctx.flags.commit || "phase"}`);
               console.log(`\nEnhanced Features:`);
-              console.log(`  - Memory Bank enabled via: npx claude-flow memory commands`);
+              console.log(`  - Memory Bank enabled via: npx ollama-flow memory commands`);
               console.log(`  - Coordination ${ctx.flags.parallel ? 'enabled' : 'disabled'}`);
-              console.log(`  - Access Claude-Flow features through Bash tool`);
+              console.log(`  - Access Ollama-Flow features through Bash tool`);
               return;
             }
             
-            success(`Spawning Claude instance: ${instanceId}`);
+            success(`Spawning Ollama instance: ${instanceId}`);
             console.log(`📝 Original Task: ${task}`);
             console.log(`🔧 Tools: ${tools}`);
             console.log(`⚙️  Mode: ${ctx.flags.mode || "full"}`);
             console.log(`📊 Coverage: ${ctx.flags.coverage || 80}%`);
             console.log(`💾 Commit: ${ctx.flags.commit || "phase"}`);
-            console.log(`✨ Enhanced with Claude-Flow guidance for memory and coordination`);
+            console.log(`✨ Enhanced with Ollama-Flow guidance for memory and coordination`);
             console.log('');
             console.log('📋 Task will be enhanced with:');
             console.log('  - Memory Bank instructions (store/retrieve)');
@@ -1153,20 +1153,20 @@ Now, please proceed with the task: ${task}`;
             console.log('  - Best practices for multi-agent workflows');
             console.log('');
             
-            // Execute Claude command
+            // Execute Ollama command
             const { spawn } = await import("child_process");
-            const child = spawn("claude", claudeCmd.slice(1).map(arg => arg.replace(/^"|"$/g, '')), {
+            const child = spawn("ollama", ollamaCmd.slice(1).map(arg => arg.replace(/^"|"$/g, '')), {
               env: {
                 ...process.env,
-                CLAUDE_INSTANCE_ID: instanceId,
-                CLAUDE_FLOW_MODE: ctx.flags.mode as string || "full",
-                CLAUDE_FLOW_COVERAGE: (ctx.flags.coverage || 80).toString(),
-                CLAUDE_FLOW_COMMIT: ctx.flags.commit as string || "phase",
-                // Add Claude-Flow specific features
-                CLAUDE_FLOW_MEMORY_ENABLED: 'true',
-                CLAUDE_FLOW_MEMORY_NAMESPACE: 'default',
-                CLAUDE_FLOW_COORDINATION_ENABLED: ctx.flags.parallel ? 'true' : 'false',
-                CLAUDE_FLOW_FEATURES: 'memory,coordination,swarm',
+                OLLAMA_INSTANCE_ID: instanceId,
+                OLLAMA_FLOW_MODE: ctx.flags.mode as string || "full",
+                OLLAMA_FLOW_COVERAGE: (ctx.flags.coverage || 80).toString(),
+                OLLAMA_FLOW_COMMIT: ctx.flags.commit as string || "phase",
+                // Add Ollama-Flow specific features
+                OLLAMA_FLOW_MEMORY_ENABLED: 'true',
+                OLLAMA_FLOW_MEMORY_NAMESPACE: 'default',
+                OLLAMA_FLOW_COORDINATION_ENABLED: ctx.flags.parallel ? 'true' : 'false',
+                OLLAMA_FLOW_FEATURES: 'memory,coordination,swarm',
               },
               stdio: "inherit",
             });
@@ -1178,13 +1178,13 @@ Now, please proceed with the task: ${task}`;
             });
             
             if (status.success) {
-              success(`Claude instance ${instanceId} completed successfully`);
+              success(`Ollama instance ${instanceId} completed successfully`);
             } else {
-              error(`Claude instance ${instanceId} exited with code ${status.code}`);
+              error(`Ollama instance ${instanceId} exited with code ${status.code}`);
             }
             
           } catch (err) {
-            error(`Failed to spawn Claude: ${(err as Error).message}`);
+            error(`Failed to spawn Ollama: ${(err as Error).message}`);
           }
           break;
         }
@@ -1192,7 +1192,7 @@ Now, please proceed with the task: ${task}`;
         case "batch": {
           const workflowFile = ctx.args[1];
           if (!workflowFile) {
-            error("Usage: claude batch <workflow-file>");
+            error("Usage: ollama batch <workflow-file>");
             break;
           }
           
@@ -1212,39 +1212,39 @@ Now, please proceed with the task: ${task}`;
             const promises = [];
             
             for (const task of workflow.tasks) {
-              const claudeCmd = ["claude", `"${task.description || task.name}"`];
+              const ollamaCmd = ["ollama", `"${task.description || task.name}"`];
               
               // Add tools
               if (task.tools) {
                 const toolsList = Array.isArray(task.tools) ? task.tools.join(",") : task.tools;
-                claudeCmd.push("--allowedTools", toolsList);
+                ollamaCmd.push("--allowedTools", toolsList);
               }
               
               // Add flags
               if (task.skipPermissions || task.dangerouslySkipPermissions) {
-                claudeCmd.push("--dangerously-skip-permissions");
+                ollamaCmd.push("--dangerously-skip-permissions");
               }
               
               if (task.config) {
-                claudeCmd.push("--mcp-config", task.config);
+                ollamaCmd.push("--mcp-config", task.config);
               }
               
               const taskId = task.id || `task-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
               
               if (ctx.flags.dryRun || ctx.flags["dry-run"]) {
                 console.log(`\n${yellow("DRY RUN")} - Task: ${task.name || taskId}`);
-                console.log(`Command: ${claudeCmd.join(" ")}`);
+                console.log(`Command: ${ollamaCmd.join(" ")}`);
                 continue;
               }
               
-              console.log(`\n🚀 Spawning Claude for task: ${task.name || taskId}`);
+              console.log(`\n🚀 Spawning Ollama for task: ${task.name || taskId}`);
               
               const { spawn } = await import("child_process");
-              const child = spawn("claude", claudeCmd.slice(1).map(arg => arg.replace(/^"|"$/g, '')), {
+              const child = spawn("ollama", ollamaCmd.slice(1).map(arg => arg.replace(/^"|"$/g, '')), {
                 env: {
                   ...process.env,
-                  CLAUDE_TASK_ID: taskId,
-                  CLAUDE_TASK_TYPE: task.type || "general",
+                  OLLAMA_TASK_ID: taskId,
+                  OLLAMA_TASK_TYPE: task.type || "general",
                 },
                 stdio: "inherit",
               });
@@ -1269,7 +1269,7 @@ Now, please proceed with the task: ${task}`;
             }
             
             if (workflow.parallel && promises.length > 0) {
-              success("All Claude instances spawned in parallel mode");
+              success("All Ollama instances spawned in parallel mode");
               const results = await Promise.all(promises);
               const failed = results.filter(s => !s.success).length;
               if (failed > 0) {
@@ -1288,9 +1288,9 @@ Now, please proceed with the task: ${task}`;
         default: {
           console.log("Available subcommands: spawn, batch");
           console.log("\nExamples:");
-          console.log("  claude-flow claude spawn \"implement user authentication\" --research --parallel");
-          console.log("  claude-flow claude spawn \"fix bug in payment system\" --no-permissions");
-          console.log("  claude-flow claude batch workflow.json --dry-run");
+          console.log("  ollama-flow ollama spawn \"implement user authentication\" --research --parallel");
+          console.log("  ollama-flow ollama spawn \"fix bug in payment system\" --no-permissions");
+          console.log("  ollama-flow ollama batch workflow.json --dry-run");
           break;
         }
       }
@@ -1313,7 +1313,7 @@ Now, please proceed with the task: ${task}`;
       };
       
       console.log(colors.cyan('📊 Enhanced Monitor Command'));
-      console.log('For full enhanced functionality, use: claude-flow monitor [options]');
+      console.log('For full enhanced functionality, use: ollama-flow monitor [options]');
       console.log('Available options: --interval, --compact, --focus, --alerts, --export, --threshold, --log-level, --no-graphs');
       
       // Fallback to basic monitoring
@@ -1325,7 +1325,7 @@ Now, please proceed with the task: ${task}`;
         const isRunning = await access("orchestrator.log").then(() => true).catch(() => false);
         
         if (!isRunning) {
-          warning("Orchestrator is not running. Start it first with 'claude-flow start'");
+          warning("Orchestrator is not running. Start it first with 'ollama-flow start'");
           return;
         }
         
@@ -1356,7 +1356,7 @@ Now, please proceed with the task: ${task}`;
             const tasks = await persist.getActiveTasks();
             
             // Enhanced header
-            success("Claude-Flow Enhanced Live Monitor");
+            success("Ollama-Flow Enhanced Live Monitor");
             console.log("═".repeat(60));
             console.log(`Update #${++cycles} • ${new Date().toLocaleTimeString()} • Interval: ${options.interval}s`);
             
@@ -1473,7 +1473,7 @@ Now, please proceed with the task: ${task}`;
           const isRunning = await access("orchestrator.log").then(() => true).catch(() => false);
           
           if (!isRunning) {
-            warning("Orchestrator is not running. Start it first with 'claude-flow start'");
+            warning("Orchestrator is not running. Start it first with 'ollama-flow start'");
             return;
           }
           
@@ -1494,7 +1494,7 @@ Now, please proceed with the task: ${task}`;
           while (running) {
             console.clear();
             const stats = await persist.getStats();
-            success("Claude-Flow Live Monitor");
+            success("Ollama-Flow Live Monitor");
             console.log(`🟢 Status: Running`);
             console.log(`🤖 Agents: ${stats.activeAgents} active`);
             console.log(`📋 Tasks: ${stats.pendingTasks} pending`);
@@ -1511,7 +1511,7 @@ Now, please proceed with the task: ${task}`;
   // Swarm command
   cli.command({
     name: "swarm",
-    description: "Create self-orchestrating Claude agent swarms",
+    description: "Create self-orchestrating Ollama agent swarms",
     options: [
       {
         name: "strategy",
@@ -1691,7 +1691,7 @@ Now, please proceed with the task: ${task}`;
   // Swarm UI command (convenience wrapper)
   cli.command({
     name: "swarm-ui",
-    description: "Create self-orchestrating Claude agent swarms with blessed UI",
+    description: "Create self-orchestrating Ollama agent swarms with blessed UI",
     options: [
       {
         name: "strategy",
@@ -1774,7 +1774,7 @@ Now, please proceed with the task: ${task}`;
   try {
     const enhancedSessionAction = async (ctx: CommandContext) => {
       console.log(colors.cyan('💾 Enhanced Session Management'));
-      console.log('For full enhanced functionality, use: claude-flow session <command> [options]');
+      console.log('For full enhanced functionality, use: ollama-flow session <command> [options]');
       console.log();
       console.log('Available commands:');
       console.log('  list          - List all saved sessions with status');
@@ -1801,7 +1801,7 @@ Now, please proceed with the task: ${task}`;
       const subcommand = ctx.args[0];
       if (subcommand) {
         console.log();
-        console.log(`For detailed help on '${subcommand}', use: claude-flow session ${subcommand} --help`);
+        console.log(`For detailed help on '${subcommand}', use: ollama-flow session ${subcommand} --help`);
       }
     };
     
@@ -1817,7 +1817,7 @@ Now, please proceed with the task: ${task}`;
   // Enhanced orchestration start command integration
   try {
     const enhancedStartAction = async (ctx: CommandContext) => {
-      console.log(colors.cyan('🧠 Enhanced Claude-Flow Orchestration System'));
+      console.log(colors.cyan('🧠 Enhanced Ollama-Flow Orchestration System'));
       console.log('Features: Service Management + Health Checks + Auto-Recovery + Process UI');
       console.log();
       
@@ -1847,7 +1847,7 @@ Now, please proceed with the task: ${task}`;
       }
       
       console.log();
-      console.log('For full enhanced functionality, use: claude-flow start [options]');
+      console.log('For full enhanced functionality, use: ollama-flow start [options]');
       console.log('Available options: --daemon, --port, --mcp-transport, --ui, --verbose, --auto-start, --force, --health-check, --timeout');
       
       // Fallback to basic start functionality
@@ -1913,14 +1913,14 @@ Now, please proceed with the task: ${task}`;
     action: (ctx: CommandContext) => {
       const command = ctx.args[0];
       
-      if (command === "claude") {
-        console.log(bold(blue("Claude Instance Management")));
+      if (command === "ollama") {
+        console.log(bold(blue("Ollama Instance Management")));
         console.log();
-        console.log("Spawn and manage Claude Code instances with specific configurations.");
+        console.log("Spawn and manage Ollama Code instances with specific configurations.");
         console.log();
         console.log(bold("Subcommands:"));
-        console.log("  spawn <task>    Spawn Claude with specific configuration");
-        console.log("  batch <file>    Execute multiple Claude instances from workflow");
+        console.log("  spawn <task>    Spawn Ollama with specific configuration");
+        console.log("  batch <file>    Execute multiple Ollama instances from workflow");
         console.log();
         console.log(bold("Spawn Options:"));
         console.log("  -t, --tools <tools>        Allowed tools (comma-separated)");
@@ -1935,19 +1935,19 @@ Now, please proceed with the task: ${task}`;
         console.log("  -d, --dry-run              Show what would be executed without running");
         console.log();
         console.log(bold("Examples:"));
-        console.log(`  ${blue("claude-flow claude spawn")} "implement user authentication" --research --parallel`);
-        console.log(`  ${blue("claude-flow claude spawn")} "fix payment bug" --tools "View,Edit,Bash" --no-permissions`);
-        console.log(`  ${blue("claude-flow claude batch")} workflow.json --dry-run`);
+        console.log(`  ${blue("ollama-flow ollama spawn")} "implement user authentication" --research --parallel`);
+        console.log(`  ${blue("ollama-flow ollama spawn")} "fix payment bug" --tools "View,Edit,Bash" --no-permissions`);
+        console.log(`  ${blue("ollama-flow ollama batch")} workflow.json --dry-run`);
         console.log();
-        console.log("For more information, see: https://github.com/ruvnet/claude-code-flow/docs/11-claude-spawning.md");
+        console.log("For more information, see: https://github.com/ruvnet/ollama-code-flow/docs/11-ollama-spawning.md");
       } else if (command === "swarm" || command === "swarm-ui") {
-        console.log(bold(blue("Claude Swarm Mode")));
+        console.log(bold(blue("Ollama Swarm Mode")));
         console.log();
-        console.log("Create self-orchestrating Claude agent swarms to tackle complex objectives.");
+        console.log("Create self-orchestrating Ollama agent swarms to tackle complex objectives.");
         console.log();
         console.log(bold("Usage:"));
-        console.log("  claude-flow swarm <objective> [options]");
-        console.log("  claude-flow swarm-ui <objective> [options]  # Uses blessed UI (avoids TTY issues)");
+        console.log("  ollama-flow swarm <objective> [options]");
+        console.log("  ollama-flow swarm-ui <objective> [options]  # Uses blessed UI (avoids TTY issues)");
         console.log();
         console.log(bold("Options:"));
         console.log("  -s, --strategy <s>         Orchestration strategy (auto, research, development, analysis)");
@@ -1967,19 +1967,19 @@ Now, please proceed with the task: ${task}`;
         console.log("  --ui                       Use blessed terminal UI (avoids TTY issues)");
         console.log();
         console.log(bold("Examples:"));
-        console.log(`  ${blue("claude-flow swarm")} "Build a REST API"`);
-        console.log(`  ${blue("claude-flow swarm-ui")} "Build a REST API"  # Avoids TTY issues`);
-        console.log(`  ${blue("claude-flow swarm")} "Research cloud architecture" --strategy research --research`);
-        console.log(`  ${blue("claude-flow swarm")} "Migrate app to microservices" --coordinator --review --ui`);
+        console.log(`  ${blue("ollama-flow swarm")} "Build a REST API"`);
+        console.log(`  ${blue("ollama-flow swarm-ui")} "Build a REST API"  # Avoids TTY issues`);
+        console.log(`  ${blue("ollama-flow swarm")} "Research cloud architecture" --strategy research --research`);
+        console.log(`  ${blue("ollama-flow swarm")} "Migrate app to microservices" --coordinator --review --ui`);
         console.log();
         console.log(bold("TTY Issues?"));
         console.log("If you encounter 'Raw mode is not supported' errors, use:");
-        console.log(`  - ${blue("claude-flow swarm-ui")} <objective>  # Recommended`);
-        console.log(`  - ${blue("claude-flow swarm")} <objective> --ui`);
+        console.log(`  - ${blue("ollama-flow swarm-ui")} <objective>  # Recommended`);
+        console.log(`  - ${blue("ollama-flow swarm")} <objective> --ui`);
         console.log();
         console.log("For more information, see:");
-        console.log("  - https://github.com/ruvnet/claude-code-flow/docs/12-swarm.md");
-        console.log("  - https://github.com/ruvnet/claude-code-flow/SWARM_TTY_SOLUTION.md");
+        console.log("  - https://github.com/ruvnet/ollama-code-flow/docs/12-swarm.md");
+        console.log("  - https://github.com/ruvnet/ollama-code-flow/SWARM_TTY_SOLUTION.md");
       } else if (command === "sparc") {
         console.log(bold(blue("SPARC Development Mode")));
         console.log();
@@ -2012,19 +2012,19 @@ Now, please proceed with the task: ${task}`;
         console.log("  --sequential             Wait between workflow steps (default: true)");
         console.log();
         console.log(bold("Examples:"));
-        console.log(`  ${blue("claude-flow sparc modes")}                              # List all modes`);
-        console.log(`  ${blue("claude-flow sparc run code")} "implement user auth"      # Run specific mode`);
-        console.log(`  ${blue("claude-flow sparc tdd")} "payment processing system"    # Full TDD workflow`);
-        console.log(`  ${blue("claude-flow sparc workflow")} project-workflow.json     # Custom workflow`);
+        console.log(`  ${blue("ollama-flow sparc modes")}                              # List all modes`);
+        console.log(`  ${blue("ollama-flow sparc run code")} "implement user auth"      # Run specific mode`);
+        console.log(`  ${blue("ollama-flow sparc tdd")} "payment processing system"    # Full TDD workflow`);
+        console.log(`  ${blue("ollama-flow sparc workflow")} project-workflow.json     # Custom workflow`);
         console.log();
-        console.log("For more information, see: https://github.com/ruvnet/claude-code-flow/docs/sparc.md");
+        console.log("For more information, see: https://github.com/ruvnet/ollama-code-flow/docs/sparc.md");
       } else if (command === "start") {
         console.log(bold(blue("Enhanced Start Command")));
         console.log();
-        console.log("Start the Claude-Flow orchestration system with comprehensive service management.");
+        console.log("Start the Ollama-Flow orchestration system with comprehensive service management.");
         console.log();
         console.log(bold("Usage:"));
-        console.log("  claude-flow start [options]");
+        console.log("  ollama-flow start [options]");
         console.log();
         console.log(bold("Options:"));
         console.log("  -d, --daemon              Run as daemon in background");
@@ -2039,17 +2039,17 @@ Now, please proceed with the task: ${task}`;
         console.log("  --timeout <seconds>       Startup timeout in seconds (default: 60)");
         console.log();
         console.log(bold("Examples:"));
-        console.log(`  ${blue("claude-flow start")}                    # Interactive mode`);
-        console.log(`  ${blue("claude-flow start --daemon")}           # Background daemon`);
-        console.log(`  ${blue("claude-flow start --ui")}               # Process management UI`);
-        console.log(`  ${blue("claude-flow start --health-check")}     # With pre-flight checks`);
+        console.log(`  ${blue("ollama-flow start")}                    # Interactive mode`);
+        console.log(`  ${blue("ollama-flow start --daemon")}           # Background daemon`);
+        console.log(`  ${blue("ollama-flow start --ui")}               # Process management UI`);
+        console.log(`  ${blue("ollama-flow start --health-check")}     # With pre-flight checks`);
       } else if (command === "status") {
         console.log(bold(blue("Enhanced Status Command")));
         console.log();
-        console.log("Show comprehensive Claude-Flow system status with detailed reporting.");
+        console.log("Show comprehensive Ollama-Flow system status with detailed reporting.");
         console.log();
         console.log(bold("Usage:"));
-        console.log("  claude-flow status [options]");
+        console.log("  ollama-flow status [options]");
         console.log();
         console.log(bold("Options:"));
         console.log("  -w, --watch              Watch mode - continuously update status");
@@ -2061,17 +2061,17 @@ Now, please proceed with the task: ${task}`;
         console.log("  --history                Show status history from logs");
         console.log();
         console.log(bold("Examples:"));
-        console.log(`  ${blue("claude-flow status")}                   # Basic status`);
-        console.log(`  ${blue("claude-flow status --watch")}           # Live updates`);
-        console.log(`  ${blue("claude-flow status --detailed")}        # Comprehensive info`);
-        console.log(`  ${blue("claude-flow status --component mcp")}   # Specific component`);
+        console.log(`  ${blue("ollama-flow status")}                   # Basic status`);
+        console.log(`  ${blue("ollama-flow status --watch")}           # Live updates`);
+        console.log(`  ${blue("ollama-flow status --detailed")}        # Comprehensive info`);
+        console.log(`  ${blue("ollama-flow status --component mcp")}   # Specific component`);
       } else if (command === "monitor") {
         console.log(bold(blue("Enhanced Monitor Command")));
         console.log();
         console.log("Real-time monitoring dashboard with comprehensive metrics and alerting.");
         console.log();
         console.log(bold("Usage:"));
-        console.log("  claude-flow monitor [options]");
+        console.log("  ollama-flow monitor [options]");
         console.log();
         console.log(bold("Options:"));
         console.log("  -i, --interval <seconds> Update interval in seconds (default: 2)");
@@ -2084,10 +2084,10 @@ Now, please proceed with the task: ${task}`;
         console.log("  --no-graphs              Disable ASCII graphs");
         console.log();
         console.log(bold("Examples:"));
-        console.log(`  ${blue("claude-flow monitor")}                  # Basic monitoring`);
-        console.log(`  ${blue("claude-flow monitor --alerts")}         # With alerting`);
-        console.log(`  ${blue("claude-flow monitor --focus mcp")}      # Component focus`);
-        console.log(`  ${blue("claude-flow monitor --export data.json")} # Data export`);
+        console.log(`  ${blue("ollama-flow monitor")}                  # Basic monitoring`);
+        console.log(`  ${blue("ollama-flow monitor --alerts")}         # With alerting`);
+        console.log(`  ${blue("ollama-flow monitor --focus mcp")}      # Component focus`);
+        console.log(`  ${blue("ollama-flow monitor --export data.json")} # Data export`);
       } else if (command === "session") {
         console.log(bold(blue("Enhanced Session Management")));
         console.log();
@@ -2108,13 +2108,13 @@ Now, please proceed with the task: ${task}`;
         console.log("  monitor                  Monitor active sessions");
         console.log();
         console.log(bold("Examples:"));
-        console.log(`  ${blue("claude-flow session list")}             # List sessions`);
-        console.log(`  ${blue("claude-flow session save mywork")}      # Save session`);
-        console.log(`  ${blue("claude-flow session restore abc123")}   # Restore session`);
-        console.log(`  ${blue("claude-flow session validate --fix")}   # Validate and fix`);
+        console.log(`  ${blue("ollama-flow session list")}             # List sessions`);
+        console.log(`  ${blue("ollama-flow session save mywork")}      # Save session`);
+        console.log(`  ${blue("ollama-flow session restore abc123")}   # Restore session`);
+        console.log(`  ${blue("ollama-flow session validate --fix")}   # Validate and fix`);
       } else {
         // Show general help with enhanced commands
-        console.log(bold(blue("Claude-Flow Enhanced Orchestration System")));
+        console.log(bold(blue("Ollama-Flow Enhanced Orchestration System")));
         console.log();
         console.log("Available commands:");
         console.log("  start        Enhanced orchestration system startup");
@@ -2127,10 +2127,10 @@ Now, please proceed with the task: ${task}`;
         console.log("  task         Task creation and management");
         console.log("  memory       Memory bank operations");
         console.log("  mcp          MCP server management");
-        console.log("  claude       Claude instance spawning");
+        console.log("  ollama       Ollama instance spawning");
         console.log();
         console.log("For detailed help on any command, use:");
-        console.log(`  ${blue("claude-flow help <command>")}`);
+        console.log(`  ${blue("ollama-flow help <command>")}`);
         console.log();
         console.log("Enhanced features:");
         console.log("  ✨ Comprehensive service management");
@@ -2151,7 +2151,7 @@ Now, please proceed with the task: ${task}`;
   console.log('  ✓ session  - Advanced session lifecycle management');
   console.log('  ✓ sparc    - Enhanced TDD with orchestration features');
   console.log();
-  console.log('For detailed help on enhanced commands: claude-flow help <command>');
+  console.log('For detailed help on enhanced commands: ollama-flow help <command>');
 
   // Add enterprise commands
   for (const command of enterpriseCommands) {
@@ -2184,8 +2184,8 @@ function getDefaultPromptForType(type: string): string {
 }
 
 // Template creation functions
-function createMinimalClaudeMd(): string {
-  return `# Claude Code Configuration
+function createMinimalOllamaMd(): string {
+  return `# Ollama Code Configuration
 
 ## Build Commands
 - \`npm run build\`: Build the project
@@ -2198,20 +2198,20 @@ function createMinimalClaudeMd(): string {
 - Run typecheck before committing
 
 ## Project Info
-This is a Claude-Flow AI agent orchestration system.
+This is an Ollama-Flow AI agent orchestration system.
 `;
 }
 
-function createFullClaudeMd(): string {
-  return `# Claude Code Configuration
+function createFullOllamaMd(): string {
+  return `# Ollama Code Configuration
 
 ## Build Commands
 - \`npm run build\`: Build the project using Deno compile
 - \`npm run test\`: Run the full test suite
 - \`npm run lint\`: Run ESLint and format checks
 - \`npm run typecheck\`: Run TypeScript type checking
-- \`npx claude-flow start\`: Start the orchestration system
-- \`npx claude-flow --help\`: Show all available commands
+- \`npx ollama-flow start\`: Start the orchestration system
+- \`npx ollama-flow --help\`: Show all available commands
 
 ## Code Style Preferences
 - Use ES modules (import/export) syntax, not CommonJS (require)
@@ -2230,24 +2230,24 @@ function createFullClaudeMd(): string {
 - Ensure all tests pass before merging
 
 ## Project Architecture
-This is a Claude-Flow AI agent orchestration system with the following components:
+This is an Ollama-Flow AI agent orchestration system with the following components:
 - **CLI Interface**: Command-line tools for managing the system
 - **Orchestrator**: Core engine for coordinating agents and tasks
 - **Memory System**: Persistent storage and retrieval of information
 - **Terminal Management**: Automated terminal session handling
-- **MCP Integration**: Model Context Protocol server for Claude integration
+- **MCP Integration**: Model Context Protocol server for Ollama integration
 - **Agent Coordination**: Multi-agent task distribution and management
 
 ## Important Notes
-- Use \`claude --dangerously-skip-permissions\` for unattended operation
+- Use \`ollama --dangerously-skip-permissions\` for unattended operation
 - The system supports both daemon and interactive modes
 - Memory persistence is handled automatically
 - All components are event-driven for scalability
 
 ## Debugging
-- Check logs in \`./claude-flow.log\`
-- Use \`npx claude-flow status\` to check system health
-- Monitor with \`npx claude-flow monitor\` for real-time updates
+- Check logs in \`./ollama-flow.log\`
+- Use \`npx ollama-flow status\` to check system health
+- Monitor with \`npx ollama-flow monitor\` for real-time updates
 - Verbose output available with \`--verbose\` flag on most commands
 `;
 }
@@ -2258,10 +2258,10 @@ function createMinimalMemoryBankMd(): string {
 ## Quick Reference
 - Project uses SQLite for memory persistence
 - Memory is organized by namespaces
-- Query with \`npx claude-flow memory query <search>\`
+- Query with \`npx ollama-flow memory query <search>\`
 
 ## Storage Location
-- Database: \`./memory/claude-flow-data.json\`
+- Database: \`./memory/ollama-flow-data.json\`
 - Sessions: \`./memory/sessions/\`
 `;
 }
@@ -2270,10 +2270,10 @@ function createFullMemoryBankMd(): string {
   return `# Memory Bank Configuration
 
 ## Overview
-The Claude-Flow memory system provides persistent storage and intelligent retrieval of information across agent sessions. It uses a hybrid approach combining SQL databases with semantic search capabilities.
+The Ollama-Flow memory system provides persistent storage and intelligent retrieval of information across agent sessions. It uses a hybrid approach combining SQL databases with semantic search capabilities.
 
 ## Storage Backends
-- **Primary**: JSON database (\`./memory/claude-flow-data.json\`)
+- **Primary**: JSON database (\`./memory/ollama-flow-data.json\`)
 - **Sessions**: File-based storage in \`./memory/sessions/\`
 - **Cache**: In-memory cache for frequently accessed data
 
@@ -2284,18 +2284,18 @@ The Claude-Flow memory system provides persistent storage and intelligent retrie
 - **Replication**: Optional distributed storage support
 
 ## Commands
-- \`npx claude-flow memory query <search>\`: Search stored information
-- \`npx claude-flow memory stats\`: Show memory usage statistics
-- \`npx claude-flow memory export <file>\`: Export memory to file
-- \`npx claude-flow memory import <file>\`: Import memory from file
+- \`npx ollama-flow memory query <search>\`: Search stored information
+- \`npx ollama-flow memory stats\`: Show memory usage statistics
+- \`npx ollama-flow memory export <file>\`: Export memory to file
+- \`npx ollama-flow memory import <file>\`: Import memory from file
 
 ## Configuration
-Memory settings are configured in \`claude-flow.config.json\`:
+Memory settings are configured in \`ollama-flow.config.json\`:
 \`\`\`json
 {
   "memory": {
     "backend": "json",
-    "path": "./memory/claude-flow-data.json",
+    "path": "./memory/ollama-flow-data.json",
     "cacheSize": 1000,
     "indexing": true,
     "namespaces": ["default", "agents", "tasks", "sessions"],
@@ -2332,9 +2332,9 @@ function createMinimalCoordinationMd(): string {
   return `# Agent Coordination
 
 ## Quick Commands
-- \`npx claude-flow agent spawn <type>\`: Create new agent
-- \`npx claude-flow agent list\`: Show active agents
-- \`npx claude-flow task create <type> <description>\`: Create task
+- \`npx ollama-flow agent spawn <type>\`: Create new agent
+- \`npx ollama-flow agent list\`: Show active agents
+- \`npx ollama-flow task create <type> <description>\`: Create task
 
 ## Agent Types
 - researcher, coder, analyst, coordinator, general
@@ -2345,7 +2345,7 @@ function createFullCoordinationMd(): string {
   return `# Agent Coordination System
 
 ## Overview
-The Claude-Flow coordination system manages multiple AI agents working together on complex tasks. It provides intelligent task distribution, resource management, and inter-agent communication.
+The Ollama-Flow coordination system manages multiple AI agents working together on complex tasks. It provides intelligent task distribution, resource management, and inter-agent communication.
 
 ## Agent Types and Capabilities
 - **Researcher**: Web search, information gathering, knowledge synthesis
@@ -2363,27 +2363,27 @@ The Claude-Flow coordination system manages multiple AI agents working together 
 ## Coordination Commands
 \`\`\`bash
 # Agent Management
-npx claude-flow agent spawn <type> --name <name> --priority <1-10>
-npx claude-flow agent list
-npx claude-flow agent info <agent-id>
-npx claude-flow agent terminate <agent-id>
+npx ollama-flow agent spawn <type> --name <name> --priority <1-10>
+npx ollama-flow agent list
+npx ollama-flow agent info <agent-id>
+npx ollama-flow agent terminate <agent-id>
 
 # Task Management  
-npx claude-flow task create <type> <description> --priority <1-10> --deps <task-ids>
-npx claude-flow task list --verbose
-npx claude-flow task status <task-id>
-npx claude-flow task cancel <task-id>
+npx ollama-flow task create <type> <description> --priority <1-10> --deps <task-ids>
+npx ollama-flow task list --verbose
+npx ollama-flow task status <task-id>
+npx ollama-flow task cancel <task-id>
 
 # System Monitoring
-npx claude-flow status --verbose
-npx claude-flow monitor --interval 5000
+npx ollama-flow status --verbose
+npx ollama-flow monitor --interval 5000
 \`\`\`
 
 ## Workflow Execution
 Workflows are defined in JSON format and can orchestrate complex multi-agent operations:
 \`\`\`bash
-npx claude-flow workflow examples/research-workflow.json
-npx claude-flow workflow examples/development-config.json --async
+npx ollama-flow workflow examples/research-workflow.json
+npx ollama-flow workflow examples/development-config.json --async
 \`\`\`
 
 ## Advanced Features
@@ -2393,7 +2393,7 @@ npx claude-flow workflow examples/development-config.json --async
 - **Metrics Collection**: Performance monitoring and optimization
 
 ## Configuration
-Coordination settings in \`claude-flow.config.json\`:
+Coordination settings in \`ollama-flow.config.json\`:
 \`\`\`json
 {
   "orchestrator": {
@@ -2426,8 +2426,8 @@ Coordination settings in \`claude-flow.config.json\`:
 - Regular cleanup of completed tasks and inactive agents
 
 ## Troubleshooting
-- Check agent health with \`npx claude-flow status\`
-- View detailed logs with \`npx claude-flow monitor\`
+- Check agent health with \`npx ollama-flow status\`
+- View detailed logs with \`npx ollama-flow monitor\`
 - Restart stuck agents with terminate/spawn cycle
 - Use \`--verbose\` flags for detailed diagnostic information
 `;
@@ -2437,7 +2437,7 @@ function createAgentsReadme(): string {
   return `# Agent Memory Storage
 
 ## Purpose
-This directory stores agent-specific memory data, configurations, and persistent state information for individual Claude agents in the orchestration system.
+This directory stores agent-specific memory data, configurations, and persistent state information for individual Ollama agents in the orchestration system.
 
 ## Structure
 Each agent gets its own subdirectory for isolated memory storage:
@@ -2472,7 +2472,7 @@ function createSessionsReadme(): string {
   return `# Session Memory Storage
 
 ## Purpose
-This directory stores session-based memory data, conversation history, and contextual information for development sessions using the Claude-Flow orchestration system.
+This directory stores session-based memory data, conversation history, and contextual information for development sessions using the Ollama-Flow orchestration system.
 
 ## Structure
 Sessions are organized by date and session ID for easy retrieval:

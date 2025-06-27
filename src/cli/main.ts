@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Claude-Flow CLI - Main entry point for Node.js
+ * Ollama-Flow CLI - Main entry point for Node.js
  */
 
 import { CLI, VERSION } from "./cli-core.js";
@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
 
 async function main() {
-  const cli = new CLI("claude-flow", "Advanced AI Agent Orchestration System");
+  const cli = new CLI("ollama-flow", "Advanced AI Agent Orchestration System for Ollama/Gemma");
   
   // Setup all commands
   setupCommands(cli);

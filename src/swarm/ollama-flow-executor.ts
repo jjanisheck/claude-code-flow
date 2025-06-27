@@ -1,6 +1,6 @@
 /**
- * Ollama/Gemma Flow SPARC Executor
- * Executes tasks using Ollama/Gemma instead of Claude for SPARC system
+ * Ollama-Flow SPARC Executor
+ * Executes tasks using Ollama/Gemma for SPARC system
  */
 
 import { TaskDefinition, AgentState, TaskResult } from './types.js';
@@ -8,7 +8,7 @@ import { Logger } from '../core/logger.js';
 import * as path from 'node:path';
 import { spawn } from 'node:child_process';
 
-export interface ClaudeFlowExecutorConfig {
+export interface OllamaFlowExecutorConfig {
   logger?: Logger;
   ollamaModel?: string;
   ollamaHost?: string;
@@ -17,7 +17,7 @@ export interface ClaudeFlowExecutorConfig {
   timeoutMinutes?: number;
 }
 
-export class ClaudeFlowExecutor {
+export class OllamaFlowExecutor {
   private logger: Logger;
   private ollamaModel: string;
   private ollamaHost: string;
@@ -25,7 +25,7 @@ export class ClaudeFlowExecutor {
   private verbose: boolean;
   private timeoutMinutes: number;
 
-  constructor(config: ClaudeFlowExecutorConfig = {}) {
+  constructor(config: OllamaFlowExecutorConfig = {}) {
     this.logger = config.logger || new Logger(
       { level: 'info', format: 'text', destination: 'console' },
       { component: 'OllamaFlowExecutor' }
@@ -326,8 +326,8 @@ Please provide:
         env: {
           ...process.env,
           OLLAMA_HOST: this.ollamaHost,
-          GEMMA_FLOW_NON_INTERACTIVE: 'true',
-          GEMMA_FLOW_AUTO_CONFIRM: 'true'
+          OLLAMA_FLOW_NON_INTERACTIVE: 'true',
+          OLLAMA_FLOW_AUTO_CONFIRM: 'true'
         }
       });
 
@@ -387,4 +387,4 @@ Please provide:
 }
 
 // Export for use in swarm coordinator
-export default ClaudeFlowExecutor;
+export default OllamaFlowExecutor;

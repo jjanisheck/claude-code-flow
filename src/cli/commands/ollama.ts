@@ -7,10 +7,10 @@ import { colors } from '@cliffy/ansi/colors';
 import { spawn } from 'node:child_process';
 import { generateId } from '../../utils/helpers.js';
 
-export const claudeCommand = new Command()
+export const ollamaCommand = new Command()
   .description('Manage Ollama/Gemma instances')
   .action(() => {
-    claudeCommand.showHelp();
+    ollamaCommand.showHelp();
   })
   .command('spawn', new Command()
     .description('Spawn a new Ollama/Gemma instance with specific configuration')
@@ -79,10 +79,10 @@ Please provide a detailed response with code, explanations, and any necessary st
           env: {
             ...process.env,
             OLLAMA_HOST: options.host,
-            GEMMA_INSTANCE_ID: instanceId,
-            GEMMA_FLOW_MODE: options.mode,
-            GEMMA_FLOW_COVERAGE: options.coverage.toString(),
-            GEMMA_FLOW_COMMIT: options.commit,
+            OLLAMA_INSTANCE_ID: instanceId,
+            OLLAMA_FLOW_MODE: options.mode,
+            OLLAMA_FLOW_COVERAGE: options.coverage.toString(),
+            OLLAMA_FLOW_COMMIT: options.commit,
             OLLAMA_NUM_CTX: options.context.toString(),
           }
         });
@@ -152,8 +152,8 @@ Please provide a detailed response with code, explanations, and any necessary st
               env: {
                 ...process.env,
                 OLLAMA_HOST: options.host,
-                GEMMA_TASK_ID: task.id || generateId('task'),
-                GEMMA_TASK_TYPE: task.type || 'general',
+                OLLAMA_TASK_ID: task.id || generateId('task'),
+                OLLAMA_TASK_TYPE: task.type || 'general',
               }
             });
             

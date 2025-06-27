@@ -49,24 +49,24 @@ const HELP_TOPICS: HelpTopic[] = [
     tutorial: [
       'Welcome to Claude-Flow! This tutorial will get you started.',
       '1. First, initialize a configuration file:',
-      '   claude-flow config init',
+      '   ollama-flow config init',
       '',
       '2. Start the orchestration system:',
-      '   claude-flow start',
+      '   ollama-flow start',
       '',
       '3. In another terminal, spawn your first agent:',
-      '   claude-flow agent spawn researcher --name "My Research Agent"',
+      '   ollama-flow agent spawn researcher --name "My Research Agent"',
       '',
       '4. Create a task for the agent:',
-      '   claude-flow task create research "Find information about AI trends"',
+      '   ollama-flow task create research "Find information about AI trends"',
       '',
       '5. Monitor progress:',
-      '   claude-flow status',
+      '   ollama-flow status',
       '',
       'You can also use the interactive REPL mode:',
-      '   claude-flow repl',
+      '   ollama-flow repl',
       '',
-      'For more help, try: claude-flow help <topic>'
+      'For more help, try: ollama-flow help <topic>'
     ],
     related: ['agents', 'tasks', 'configuration']
   },
@@ -77,22 +77,22 @@ const HELP_TOPICS: HelpTopic[] = [
     examples: [
       {
         description: 'Spawn a research agent',
-        command: 'claude-flow agent spawn researcher --name "Research Assistant"',
+        command: 'ollama-flow agent spawn researcher --name "Research Assistant"',
         explanation: 'Creates a new research agent with specialized capabilities for information gathering'
       },
       {
         description: 'List all active agents',
-        command: 'claude-flow agent list',
+        command: 'ollama-flow agent list',
         explanation: 'Shows all currently running agents with their status and task counts'
       },
       {
         description: 'Get detailed agent information',
-        command: 'claude-flow agent info agent-001',
+        command: 'ollama-flow agent info agent-001',
         explanation: 'Displays comprehensive information about a specific agent'
       },
       {
         description: 'Terminate an agent',
-        command: 'claude-flow agent terminate agent-001',
+        command: 'ollama-flow agent terminate agent-001',
         explanation: 'Safely shuts down an agent and reassigns its tasks'
       }
     ],
@@ -114,7 +114,7 @@ const HELP_TOPICS: HelpTopic[] = [
       'Best Practices:',
       '• Use descriptive names for your agents',
       '• Match agent types to your workflow needs',
-      '• Monitor agent performance with "claude-flow status"',
+      '• Monitor agent performance with "ollama-flow status"',
       '• Terminate idle agents to free resources'
     ],
     related: ['tasks', 'workflows', 'coordination']
@@ -126,27 +126,27 @@ const HELP_TOPICS: HelpTopic[] = [
     examples: [
       {
         description: 'Create a research task',
-        command: 'claude-flow task create research "Find papers on quantum computing" --priority 5',
+        command: 'ollama-flow task create research "Find papers on quantum computing" --priority 5',
         explanation: 'Creates a high-priority research task with specific instructions'
       },
       {
         description: 'Create a task with dependencies',
-        command: 'claude-flow task create analysis "Analyze research results" --dependencies task-001',
+        command: 'ollama-flow task create analysis "Analyze research results" --dependencies task-001',
         explanation: 'Creates a task that waits for task-001 to complete before starting'
       },
       {
         description: 'Assign task to specific agent',
-        command: 'claude-flow task create implementation "Write API client" --assign agent-003',
+        command: 'ollama-flow task create implementation "Write API client" --assign agent-003',
         explanation: 'Directly assigns a task to a specific agent'
       },
       {
         description: 'Monitor task progress',
-        command: 'claude-flow task status task-001',
+        command: 'ollama-flow task status task-001',
         explanation: 'Shows detailed status and progress information for a task'
       },
       {
         description: 'Cancel a running task',
-        command: 'claude-flow task cancel task-001 --reason "Requirements changed"',
+        command: 'ollama-flow task cancel task-001 --reason "Requirements changed"',
         explanation: 'Stops a task and provides a reason for cancellation'
       }
     ],
@@ -178,63 +178,63 @@ const HELP_TOPICS: HelpTopic[] = [
     related: ['agents', 'workflows', 'coordination']
   },
   {
-    name: 'claude',
-    description: 'Spawning Claude instances with specific configurations',
+    name: 'ollama',
+    description: 'Spawning Ollama/Gemma instances with specific configurations',
     category: 'basic',
     examples: [
       {
-        description: 'Spawn Claude with web research capabilities',
-        command: 'claude-flow claude spawn "implement user authentication" --research --parallel',
-        explanation: 'Creates a Claude instance with WebFetchTool and BatchTool for parallel web research'
+        description: 'Spawn Ollama with specific model',
+        command: 'ollama-flow ollama spawn "implement user authentication" --model gemma3n:e4b',
+        explanation: 'Creates an Ollama instance using the larger Gemma 3n E4B model'
       },
       {
-        description: 'Spawn Claude without permission prompts',
-        command: 'claude-flow claude spawn "fix payment bug" --no-permissions',
-        explanation: 'Runs Claude with --dangerously-skip-permissions flag to avoid interruptions'
+        description: 'Spawn Ollama with custom temperature',
+        command: 'ollama-flow ollama spawn "fix payment bug" --temperature 0.3',
+        explanation: 'Runs Ollama with lower temperature for more focused code generation'
       },
       {
-        description: 'Spawn Claude with custom tools',
-        command: 'claude-flow claude spawn "analyze codebase" --tools "View,Edit,GrepTool,LS"',
-        explanation: 'Specifies exactly which tools Claude can use for the task'
+        description: 'Spawn Ollama with custom context length',
+        command: 'ollama-flow ollama spawn "analyze codebase" --context 16384',
+        explanation: 'Sets larger context window for processing bigger codebases'
       },
       {
-        description: 'Spawn Claude with test coverage target',
-        command: 'claude-flow claude spawn "write unit tests" --coverage 95 --commit feature',
-        explanation: 'Sets test coverage goal to 95% and commits after each feature'
+        description: 'Spawn Ollama with specific host',
+        command: 'ollama-flow ollama spawn "write unit tests" --host "192.168.1.100:11434"',
+        explanation: 'Connects to remote Ollama server for distributed processing'
       },
       {
         description: 'Dry run to preview command',
-        command: 'claude-flow claude spawn "build API" --mode backend-only --dry-run',
-        explanation: 'Shows what would be executed without actually running Claude'
+        command: 'ollama-flow ollama spawn "build API" --model gemma3n:e2b --dry-run',
+        explanation: 'Shows what would be executed without actually running Ollama'
       }
     ],
     tutorial: [
-      'The claude spawn command launches Claude instances with specific configurations.',
+      'The ollama spawn command launches Ollama/Gemma instances with specific configurations.',
       '',
       'Available Options:',
-      '• --tools, -t: Specify allowed tools (default: View,Edit,Replace,GlobTool,GrepTool,LS,Bash)',
-      '• --no-permissions: Skip permission prompts with --dangerously-skip-permissions',
-      '• --config, -c: Path to MCP configuration file',
-      '• --mode, -m: Development mode (full, backend-only, frontend-only, api-only)',
-      '• --parallel: Enable BatchTool and dispatch_agent for parallel execution',
-      '• --research: Enable WebFetchTool for web research capabilities',
+      '• --model, -m: Gemma model to use (gemma3n:e2b, gemma3n:e4b)',
+      '• --host: Ollama server host and port (default: localhost:11434)',
+      '• --temperature: Generation temperature 0-2 (default: 0.7)',
+      '• --context: Context length in tokens (default: 8192)',
+      '• --mode: Development mode (full, backend-only, frontend-only, api-only)',
       '• --coverage: Test coverage target percentage (default: 80)',
       '• --commit: Commit frequency (phase, feature, manual)',
       '• --verbose, -v: Enable verbose output',
       '• --dry-run, -d: Preview what would be executed',
       '',
       'Environment Variables Set:',
-      '• CLAUDE_INSTANCE_ID: Unique identifier for the Claude instance',
-      '• CLAUDE_FLOW_MODE: Development mode setting',
-      '• CLAUDE_FLOW_COVERAGE: Target test coverage percentage',
-      '• CLAUDE_FLOW_COMMIT: Commit frequency setting',
+      '• OLLAMA_HOST: Ollama server endpoint',
+      '• GEMMA_INSTANCE_ID: Unique identifier for the Ollama instance',
+      '• GEMMA_FLOW_MODE: Development mode setting',
+      '• GEMMA_FLOW_COVERAGE: Target test coverage percentage',
+      '• GEMMA_FLOW_COMMIT: Commit frequency setting',
       '',
       'Common Use Cases:',
-      '• Full-stack development: --mode full --parallel',
-      '• API development: --mode backend-only --coverage 90',
-      '• Bug fixing: --no-permissions --verbose',
-      '• Research tasks: --research --parallel',
-      '• Test writing: --coverage 95 --commit feature'
+      '• Code generation: --model gemma3n:e4b --temperature 0.3',
+      '• Large projects: --context 16384 --mode full',
+      '• Quick tasks: --model gemma3n:e2b --temperature 0.5',
+      '• Remote processing: --host remote-server:11434',
+      '• Testing: --coverage 95 --commit feature'
     ],
     related: ['agents', 'tasks', 'workflows']
   },
@@ -245,27 +245,27 @@ const HELP_TOPICS: HelpTopic[] = [
     examples: [
       {
         description: 'Run a workflow from file',
-        command: 'claude-flow workflow run research-pipeline.json --watch',
+        command: 'ollama-flow workflow run research-pipeline.json --watch',
         explanation: 'Executes a workflow definition and monitors progress in real-time'
       },
       {
         description: 'Validate workflow before running',
-        command: 'claude-flow workflow validate my-workflow.json --strict',
+        command: 'ollama-flow workflow validate my-workflow.json --strict',
         explanation: 'Checks workflow syntax and dependencies without executing'
       },
       {
         description: 'Generate workflow template',
-        command: 'claude-flow workflow template research --output research-workflow.json',
+        command: 'ollama-flow workflow template research --output research-workflow.json',
         explanation: 'Creates a pre-configured workflow template for research tasks'
       },
       {
         description: 'Monitor running workflows',
-        command: 'claude-flow workflow list --all',
+        command: 'ollama-flow workflow list --all',
         explanation: 'Shows all workflows including completed ones'
       },
       {
         description: 'Stop a running workflow',
-        command: 'claude-flow workflow stop workflow-001 --force',
+        command: 'ollama-flow workflow stop workflow-001 --force',
         explanation: 'Immediately stops all tasks in a workflow'
       }
     ],
@@ -319,27 +319,27 @@ const HELP_TOPICS: HelpTopic[] = [
     examples: [
       {
         description: 'Initialize default configuration',
-        command: 'claude-flow config init --template development',
+        command: 'ollama-flow config init --template development',
         explanation: 'Creates a configuration file optimized for development'
       },
       {
         description: 'View current configuration',
-        command: 'claude-flow config show --diff',
+        command: 'ollama-flow config show --diff',
         explanation: 'Shows only settings that differ from defaults'
       },
       {
         description: 'Update a setting',
-        command: 'claude-flow config set orchestrator.maxConcurrentAgents 20',
+        command: 'ollama-flow config set orchestrator.maxConcurrentAgents 20',
         explanation: 'Changes the maximum number of concurrent agents'
       },
       {
         description: 'Save configuration profile',
-        command: 'claude-flow config profile save production',
+        command: 'ollama-flow config profile save production',
         explanation: 'Saves current settings as a named profile'
       },
       {
         description: 'Load configuration profile',
-        command: 'claude-flow config profile load development',
+        command: 'ollama-flow config profile load development',
         explanation: 'Switches to a previously saved configuration profile'
       }
     ],
@@ -367,9 +367,9 @@ const HELP_TOPICS: HelpTopic[] = [
       '  - port: Network port for HTTP transport',
       '',
       'Configuration Files:',
-      '• Global: ~/.claude-flow/config.json',
-      '• Project: ./claude-flow.config.json',
-      '• Profiles: ~/.claude-flow/profiles/',
+      '• Global: ~/.ollama-flow/config.json',
+      '• Project: ./ollama-flow.config.json',
+      '• Profiles: ~/.ollama-flow/profiles/',
       '',
       'Environment Variables:',
       '• CLAUDE_FLOW_LOG_LEVEL: Override log level',
@@ -385,22 +385,22 @@ const HELP_TOPICS: HelpTopic[] = [
     examples: [
       {
         description: 'Check system status',
-        command: 'claude-flow status --watch',
+        command: 'ollama-flow status --watch',
         explanation: 'Continuously monitors system health and updates every few seconds'
       },
       {
         description: 'Start monitoring dashboard',
-        command: 'claude-flow monitor --interval 5',
+        command: 'ollama-flow monitor --interval 5',
         explanation: 'Opens a live dashboard with real-time metrics and graphs'
       },
       {
         description: 'View component-specific status',
-        command: 'claude-flow status --component orchestrator',
+        command: 'ollama-flow status --component orchestrator',
         explanation: 'Shows detailed status for a specific system component'
       },
       {
         description: 'Monitor in compact mode',
-        command: 'claude-flow monitor --compact --no-graphs',
+        command: 'ollama-flow monitor --compact --no-graphs',
         explanation: 'Simplified monitoring view without visual graphs'
       }
     ],
@@ -441,27 +441,27 @@ const HELP_TOPICS: HelpTopic[] = [
     examples: [
       {
         description: 'Save current session',
-        command: 'claude-flow session save "Development Session" --description "Working on API integration"',
+        command: 'ollama-flow session save "Development Session" --description "Working on API integration"',
         explanation: 'Saves all current agents, tasks, and memory state'
       },
       {
         description: 'List saved sessions',
-        command: 'claude-flow session list',
+        command: 'ollama-flow session list',
         explanation: 'Shows all saved sessions with creation dates and metadata'
       },
       {
         description: 'Restore a session',
-        command: 'claude-flow session restore session-001 --merge',
+        command: 'ollama-flow session restore session-001 --merge',
         explanation: 'Restores session state, merging with current state'
       },
       {
         description: 'Export session to file',
-        command: 'claude-flow session export session-001 backup.json --include-memory',
+        command: 'ollama-flow session export session-001 backup.json --include-memory',
         explanation: 'Creates a portable backup including agent memory'
       },
       {
         description: 'Clean up old sessions',
-        command: 'claude-flow session clean --older-than 30 --dry-run',
+        command: 'ollama-flow session clean --older-than 30 --dry-run',
         explanation: 'Shows what sessions would be deleted (older than 30 days)'
       }
     ],
@@ -503,17 +503,17 @@ const HELP_TOPICS: HelpTopic[] = [
     examples: [
       {
         description: 'Start REPL mode',
-        command: 'claude-flow repl',
+        command: 'ollama-flow repl',
         explanation: 'Opens interactive command line with tab completion'
       },
       {
         description: 'REPL with custom history file',
-        command: 'claude-flow repl --history-file .my-history',
+        command: 'ollama-flow repl --history-file .my-history',
         explanation: 'Uses a specific file for command history'
       },
       {
         description: 'Skip welcome banner',
-        command: 'claude-flow repl --no-banner',
+        command: 'ollama-flow repl --no-banner',
         explanation: 'Starts REPL in minimal mode'
       }
     ],
@@ -551,22 +551,22 @@ const HELP_TOPICS: HelpTopic[] = [
     examples: [
       {
         description: 'Check system health',
-        command: 'claude-flow status --component all',
+        command: 'ollama-flow status --component all',
         explanation: 'Comprehensive health check of all components'
       },
       {
         description: 'Enable debug logging',
-        command: 'claude-flow start --log-level debug',
+        command: 'ollama-flow start --log-level debug',
         explanation: 'Start with verbose logging for debugging'
       },
       {
         description: 'Validate configuration',
-        command: 'claude-flow config validate claude-flow.config.json --strict',
+        command: 'ollama-flow config validate ollama-flow.config.json --strict',
         explanation: 'Check configuration file for errors'
       },
       {
         description: 'Reset to defaults',
-        command: 'claude-flow config reset --confirm',
+        command: 'ollama-flow config reset --confirm',
         explanation: 'Restore default configuration settings'
       }
     ],
@@ -575,7 +575,7 @@ const HELP_TOPICS: HelpTopic[] = [
       '',
       'Connection Issues:',
       '• Problem: "Connection refused" errors',
-      '• Solution: Ensure Claude-Flow is started with "claude-flow start"',
+      '• Solution: Ensure Claude-Flow is started with "ollama-flow start"',
       '• Check: MCP transport settings match between client and server',
       '',
       'Agent Issues:',
@@ -599,10 +599,10 @@ const HELP_TOPICS: HelpTopic[] = [
       '• Check: Environment variable overrides',
       '',
       'Debug Commands:',
-      '• claude-flow status: System health check',
-      '• claude-flow config validate: Configuration check',
-      '• claude-flow --verbose: Enable detailed logging',
-      '• claude-flow monitor: Real-time diagnostics'
+      '• ollama-flow status: System health check',
+      '• ollama-flow config validate: Configuration check',
+      '• ollama-flow --verbose: Enable detailed logging',
+      '• ollama-flow monitor: Real-time diagnostics'
     ],
     related: ['monitoring', 'configuration', 'debugging']
   }
@@ -618,9 +618,9 @@ function showMainHelp(): void {
   console.log();
   
   console.log(colors.yellow.bold('Quick Start:'));
-  console.log(colors.gray('  claude-flow help getting-started    # Beginner tutorial'));
-  console.log(colors.gray('  claude-flow help --interactive      # Interactive help mode'));
-  console.log(colors.gray('  claude-flow help <topic>            # Specific topic help'));
+  console.log(colors.gray('  ollama-flow help getting-started    # Beginner tutorial'));
+  console.log(colors.gray('  ollama-flow help --interactive      # Interactive help mode'));
+  console.log(colors.gray('  ollama-flow help <topic>            # Specific topic help'));
   console.log();
   
   console.log(colors.yellow.bold('Help Categories:'));
@@ -645,8 +645,8 @@ function showMainHelp(): void {
   }
   
   console.log();
-  console.log(colors.gray('Use "claude-flow help <topic>" for detailed information.'));
-  console.log(colors.gray('Use "claude-flow help --all" to see all topics.'));
+  console.log(colors.gray('Use "ollama-flow help <topic>" for detailed information.'));
+  console.log(colors.gray('Use "ollama-flow help --all" to see all topics.'));
 }
 
 function showAllTopics(): void {
@@ -668,7 +668,7 @@ function showAllTopics(): void {
   table.render();
   
   console.log();
-  console.log(colors.gray('Use "claude-flow help <topic>" for detailed information.'));
+  console.log(colors.gray('Use "ollama-flow help <topic>" for detailed information.'));
 }
 
 async function showTopicHelp(topicName: string, options: any): Promise<void> {
@@ -690,7 +690,7 @@ async function showTopicHelp(topicName: string, options: any): Promise<void> {
         console.log(colors.cyan(`  ${suggestion.name}`));
       }
     } else {
-      console.log(colors.gray('Use "claude-flow help --all" to see all topics.'));
+      console.log(colors.gray('Use "ollama-flow help --all" to see all topics.'));
     }
     return;
   }
@@ -704,7 +704,7 @@ async function showTopicHelp(topicName: string, options: any): Promise<void> {
     console.log(colors.yellow.bold('Tutorial:'));
     console.log('─'.repeat(20));
     for (const line of topic.tutorial) {
-      if (line.trim().startsWith('claude-flow')) {
+      if (line.trim().startsWith('ollama-flow')) {
         console.log(colors.cyan(`  ${line}`));
       } else if (line.trim() === '') {
         console.log();
@@ -767,7 +767,7 @@ async function showTopicHelp(topicName: string, options: any): Promise<void> {
     console.log(colors.yellow.bold('Related Topics:'));
     console.log('─'.repeat(20));
     for (const related of topic.related) {
-      console.log(colors.cyan(`  claude-flow help ${related}`));
+      console.log(colors.cyan(`  ollama-flow help ${related}`));
     }
     console.log();
   }
