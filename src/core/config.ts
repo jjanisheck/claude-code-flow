@@ -234,6 +234,14 @@ const DEFAULT_CONFIG: Config = {
     port: 3000,
     tlsEnabled: false,
   },
+  ollama: {
+    model: 'gemma3n:e2b',
+    host: 'localhost:11434',
+    temperature: 0.7,
+    contextLength: 8192,
+    requestTimeout: 300000, // 5 minutes
+    maxRetries: 3,
+  },
   logging: {
     level: 'info',
     format: 'json',
@@ -385,6 +393,64 @@ export class ConfigManager {
         }
         return null;
       }
+    });
+
+    // Ollama validation rules
+    this.validationRules.set('ollama.model', {
+      type: 'string',
+      required: true,
+      validator: (value) => {
+        if (!value.includes('gemma3n:')) {
+          return 'Model should be a Gemma 3n model (e.g., gemma3n:e2b, gemma3n:e4b)';
+        }
+        return null;
+      }
+    });
+
+    this.validationRules.set('ollama.host', {
+      type: 'string',
+      required: true,
+      pattern: /^[a-zA-Z0-9.-]+:\d+$/,
+      validator: (value) => {
+        if (!value.includes(':')) {
+          return 'Host should include port (e.g., localhost:11434)';
+        }
+        return null;
+      }
+    });
+
+    this.validationRules.set('ollama.temperature', {
+      type: 'number',
+      required: true,
+      min: 0,
+      max: 2,
+      validator: (value) => {
+        if (value > 1) {
+          return 'High temperature values may produce less coherent output';
+        }
+        return null;
+      }
+    });
+
+    this.validationRules.set('ollama.contextLength', {
+      type: 'number',
+      required: true,
+      min: 1024,
+      max: 32768
+    });
+
+    this.validationRules.set('ollama.requestTimeout', {
+      type: 'number',
+      required: true,
+      min: 10000, // 10 seconds minimum
+      max: 1800000 // 30 minutes maximum
+    });
+
+    this.validationRules.set('ollama.maxRetries', {
+      type: 'number',
+      required: true,
+      min: 0,
+      max: 10
     });
   }
 
@@ -747,6 +813,14 @@ export class ConfigManager {
         port: { type: 'number', min: 1, max: 65535 },
         tlsEnabled: { type: 'boolean' },
       },
+      ollama: {
+        model: { type: 'string', values: ['gemma3n:e2b', 'gemma3n:e4b'] },
+        host: { type: 'string' },
+        temperature: { type: 'number', min: 0, max: 2 },
+        contextLength: { type: 'number', min: 1024, max: 32768 },
+        requestTimeout: { type: 'number', min: 10000, max: 1800000 },
+        maxRetries: { type: 'number', min: 0, max: 10 },
+      },
       logging: {
         level: { type: 'string', values: ['debug', 'info', 'warn', 'error'] },
         format: { type: 'string', values: ['json', 'text'] },
@@ -968,8 +1042,51 @@ export class ConfigManager {
       };
     }
 
+    // Ollama settings
+    const ollamaModel = process.env.OLLAMA_MODEL || process.env.GEMMA_FLOW_MODEL;
+    if (ollamaModel && (ollamaModel === 'gemma3n:e2b' || ollamaModel === 'gemma3n:e4b')) {
+      config.ollama = {
+        ...DEFAULT_CONFIG.ollama,
+        ...config.ollama,
+        model: ollamaModel,
+      };
+    }
+
+    const ollamaHost = process.env.OLLAMA_HOST || process.env.GEMMA_FLOW_HOST;
+    if (ollamaHost) {
+      config.ollama = {
+        ...DEFAULT_CONFIG.ollama,
+        ...config.ollama,
+        host: ollamaHost,
+      };
+    }
+
+    const ollamaTemperature = process.env.OLLAMA_TEMPERATURE || process.env.GEMMA_FLOW_TEMPERATURE;
+    if (ollamaTemperature) {
+      const temp = parseFloat(ollamaTemperature);
+      if (!isNaN(temp) && temp >= 0 && temp <= 2) {
+        config.ollama = {
+          ...DEFAULT_CONFIG.ollama,
+          ...config.ollama,
+          temperature: temp,
+        };
+      }
+    }
+
+    const ollamaContext = process.env.OLLAMA_NUM_CTX || process.env.GEMMA_FLOW_CONTEXT;
+    if (ollamaContext) {
+      const context = parseInt(ollamaContext, 10);
+      if (!isNaN(context) && context >= 1024 && context <= 32768) {
+        config.ollama = {
+          ...DEFAULT_CONFIG.ollama,
+          ...config.ollama,
+          contextLength: context,
+        };
+      }
+    }
+
     // Logging settings
-    const logLevel = process.env.CLAUDE_FLOW_LOG_LEVEL;
+    const logLevel = process.env.CLAUDE_FLOW_LOG_LEVEL || process.env.GEMMA_FLOW_LOG_LEVEL;
     if (logLevel === 'debug' || logLevel === 'info' || logLevel === 'warn' || logLevel === 'error') {
       config.logging = {
         ...DEFAULT_CONFIG.logging,
@@ -1154,6 +1271,9 @@ function deepMergeConfig(target: Config, ...sources: Partial<Config>[]): Config 
     }
     if (source.mcp) {
       result.mcp = { ...result.mcp, ...source.mcp };
+    }
+    if (source.ollama) {
+      result.ollama = { ...result.ollama, ...source.ollama };
     }
     if (source.logging) {
       result.logging = { ...result.logging, ...source.logging };

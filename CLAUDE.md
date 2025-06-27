@@ -1,4 +1,12 @@
-# Claude Code Configuration
+# Ollama/Gemma Integration Configuration
+
+**IMPORTANT**: This version of Claude-Flow has been modified to use Ollama with Gemma 3n models instead of Claude API.
+
+## Prerequisites
+Before using Claude-Flow with Ollama/Gemma, ensure you have:
+1. **Ollama installed**: `curl -fsSL https://ollama.ai/install.sh | sh`
+2. **Gemma 3n model downloaded**: `ollama pull gemma3n:e2b`
+3. **Ollama running**: `ollama serve`
 
 ## Build Commands
 - `npm run build`: Build the project
@@ -56,10 +64,10 @@ Available SPARC modes: orchestrator, coder, researcher, tdd, architect, reviewer
 - `./claude-flow mcp status`: Show MCP server status
 - `./claude-flow mcp tools`: List available MCP tools
 
-### Claude Integration
-- `./claude-flow claude auth`: Authenticate with Claude API
-- `./claude-flow claude models`: List available Claude models
-- `./claude-flow claude chat`: Interactive chat mode
+### Ollama/Gemma Integration
+- `./claude-flow claude spawn "task description"`: Spawn Ollama/Gemma instance for task
+- `./claude-flow claude batch workflow.json`: Execute batch tasks with Ollama/Gemma
+- Check Ollama status: `ollama list` and `ollama ps`
 
 ### Session Management
 - `./claude-flow session`: Manage terminal sessions
@@ -215,6 +223,54 @@ Task("System Architect", "Design architecture and store specs in Memory");
 // Other agents use memory for coordination
 Task("Frontend Team", "Develop UI using Memory architecture specs");
 Task("Backend Team", "Implement APIs according to Memory specifications");
+```
+
+## Ollama/Gemma Configuration
+
+### Environment Variables
+Configure Ollama/Gemma integration using these environment variables:
+```bash
+export OLLAMA_MODEL="gemma3n:e2b"          # or gemma3n:e4b for larger model
+export OLLAMA_HOST="localhost:11434"        # Ollama server host
+export OLLAMA_TEMPERATURE="0.7"             # Generation temperature (0-2)
+export OLLAMA_NUM_CTX="8192"                # Context length
+export GEMMA_FLOW_MODE="full"               # Development mode
+```
+
+### Ollama Commands
+```bash
+# Install Ollama
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# Pull Gemma 3n models
+ollama pull gemma3n:e2b    # 2B effective parameters (5B total)
+ollama pull gemma3n:e4b    # 4B effective parameters (8B total)
+
+# Start Ollama server
+ollama serve
+
+# Check running models
+ollama ps
+
+# List available models
+ollama list
+```
+
+### Claude-Flow Usage Examples
+```bash
+# Spawn Ollama/Gemma instance for coding task
+./claude-flow claude spawn "Create a REST API for user management"
+
+# Use specific model
+./claude-flow claude spawn "Build a calculator app" --model gemma3n:e4b
+
+# Dry run to see what would be executed
+./claude-flow claude spawn "Create a todo app" --dry-run
+
+# SPARC mode examples
+./claude-flow sparc run code "Implement user authentication"
+./claude-flow sparc tdd "Create a shopping cart feature"
+./claude-flow sparc run architect "Design microservices architecture"
 ```
 
 ## Code Style Preferences

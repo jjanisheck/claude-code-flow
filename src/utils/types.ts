@@ -185,6 +185,7 @@ export interface Config {
   memory: MemoryConfig;
   coordination: CoordinationConfig;
   mcp: MCPConfig;
+  ollama: OllamaConfig;
   logging: LoggingConfig;
   credentials?: CredentialsConfig;
   security?: SecurityConfig;
@@ -243,6 +244,15 @@ export interface MCPConfig {
   enableMetrics?: boolean;
   corsEnabled?: boolean;
   corsOrigins?: string[];
+}
+
+export interface OllamaConfig {
+  model: string;
+  host: string;
+  temperature: number;
+  contextLength: number;
+  requestTimeout: number;
+  maxRetries: number;
 }
 
 export interface LoggingConfig {

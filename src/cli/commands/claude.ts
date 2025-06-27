@@ -1,5 +1,5 @@
 /**
- * Claude instance management commands
+ * Ollama/Gemma instance management commands
  */
 
 import { Command } from '@cliffy/command';
@@ -8,23 +8,22 @@ import { spawn } from 'node:child_process';
 import { generateId } from '../../utils/helpers.js';
 
 export const claudeCommand = new Command()
-  .description('Manage Claude instances')
+  .description('Manage Ollama/Gemma instances')
   .action(() => {
     claudeCommand.showHelp();
   })
   .command('spawn', new Command()
-    .description('Spawn a new Claude instance with specific configuration')
+    .description('Spawn a new Ollama/Gemma instance with specific configuration')
     .arguments('<task:string>')
-    .option('-t, --tools <tools:string>', 'Allowed tools (comma-separated)', { 
-      default: 'View,Edit,Replace,GlobTool,GrepTool,LS,Bash' 
+    .option('-m, --model <model:string>', 'Gemma model to use', { 
+      default: 'gemma3n:e2b' 
     })
-    .option('--no-permissions', 'Use --dangerously-skip-permissions flag')
-    .option('-c, --config <config:string>', 'MCP config file path')
-    .option('-m, --mode <mode:string>', 'Development mode (full, backend-only, frontend-only, api-only)', {
+    .option('--host <host:string>', 'Ollama host', { default: 'localhost:11434' })
+    .option('--temperature <temp:number>', 'Generation temperature', { default: 0.7 })
+    .option('--context <context:number>', 'Context length', { default: 8192 })
+    .option('--mode <mode:string>', 'Development mode (full, backend-only, frontend-only, api-only)', {
       default: 'full'
     })
-    .option('--parallel', 'Enable parallel execution with BatchTool')
-    .option('--research', 'Enable web research with WebFetchTool')
     .option('--coverage <coverage:number>', 'Test coverage target', { default: 80 })
     .option('--commit <frequency:string>', 'Commit frequency (phase, feature, manual)', {
       default: 'phase'
@@ -33,82 +32,87 @@ export const claudeCommand = new Command()
     .option('--dry-run', 'Show what would be executed without running')
     .action(async (options: any, task: string) => {
       try {
-        const instanceId = generateId('claude');
+        const instanceId = generateId('gemma');
         
-        // Build allowed tools list
-        let tools = options.tools;
-        if (options.parallel && !tools.includes('BatchTool')) {
-          tools += ',BatchTool,dispatch_agent';
-        }
-        if (options.research && !tools.includes('WebFetchTool')) {
-          tools += ',WebFetchTool';
-        }
+        // Build Ollama command args
+        const ollamaArgs = ['run'];
         
-        // Build Claude command
-        const claudeArgs = [task];
-        claudeArgs.push('--allowedTools', tools);
+        // Add model
+        ollamaArgs.push(options.model);
         
-        if (options.noPermissions) {
-          claudeArgs.push('--dangerously-skip-permissions');
-        }
+        // Format the task as a complete prompt
+        const prompt = `You are an AI assistant helping with development tasks. Please complete the following task:
+
+${task}
+
+Mode: ${options.mode}
+Coverage Target: ${options.coverage}%
+Commit Frequency: ${options.commit}
+
+Please provide a detailed response with code, explanations, and any necessary steps.`;
         
-        if (options.config) {
-          claudeArgs.push('--mcp-config', options.config);
-        }
-        
-        if (options.verbose) {
-          claudeArgs.push('--verbose');
-        }
+        ollamaArgs.push(prompt);
         
         if (options.dryRun) {
           console.log(colors.yellow('DRY RUN - Would execute:'));
-          console.log(colors.gray(`claude ${claudeArgs.join(' ')}`));
+          console.log(colors.gray(`ollama ${ollamaArgs.join(' ')}`));
           console.log('\nConfiguration:');
           console.log(`  Instance ID: ${instanceId}`);
+          console.log(`  Model: ${options.model}`);
+          console.log(`  Host: ${options.host}`);
           console.log(`  Task: ${task}`);
-          console.log(`  Tools: ${tools}`);
           console.log(`  Mode: ${options.mode}`);
+          console.log(`  Temperature: ${options.temperature}`);
+          console.log(`  Context: ${options.context}`);
           console.log(`  Coverage: ${options.coverage}%`);
           console.log(`  Commit: ${options.commit}`);
           return;
         }
         
-        console.log(colors.green(`Spawning Claude instance: ${instanceId}`));
+        console.log(colors.green(`Spawning Ollama/Gemma instance: ${instanceId}`));
+        console.log(colors.gray(`Model: ${options.model}`));
         console.log(colors.gray(`Task: ${task}`));
-        console.log(colors.gray(`Tools: ${tools}`));
         
-        // Spawn Claude process
-        const claude = spawn('claude', claudeArgs, {
+        // Spawn Ollama process
+        const ollama = spawn('ollama', ollamaArgs, {
           stdio: 'inherit',
           env: {
             ...process.env,
-            CLAUDE_INSTANCE_ID: instanceId,
-            CLAUDE_FLOW_MODE: options.mode,
-            CLAUDE_FLOW_COVERAGE: options.coverage.toString(),
-            CLAUDE_FLOW_COMMIT: options.commit,
+            OLLAMA_HOST: options.host,
+            GEMMA_INSTANCE_ID: instanceId,
+            GEMMA_FLOW_MODE: options.mode,
+            GEMMA_FLOW_COVERAGE: options.coverage.toString(),
+            GEMMA_FLOW_COMMIT: options.commit,
+            OLLAMA_NUM_CTX: options.context.toString(),
           }
         });
         
-        claude.on('error', (err) => {
-          console.error(colors.red('Failed to spawn Claude:'), err.message);
+        ollama.on('error', (err) => {
+          console.error(colors.red('Failed to spawn Ollama:'), err.message);
+          console.error(colors.yellow('Make sure Ollama is installed and running:'));
+          console.error(colors.gray('  curl -fsSL https://ollama.ai/install.sh | sh'));
+          console.error(colors.gray('  ollama pull gemma3n:e2b'));
+          console.error(colors.gray('  ollama serve'));
         });
         
-        claude.on('exit', (code) => {
+        ollama.on('exit', (code) => {
           if (code === 0) {
-            console.log(colors.green(`Claude instance ${instanceId} completed successfully`));
+            console.log(colors.green(`Ollama instance ${instanceId} completed successfully`));
           } else {
-            console.log(colors.red(`Claude instance ${instanceId} exited with code ${code}`));
+            console.log(colors.red(`Ollama instance ${instanceId} exited with code ${code}`));
           }
         });
         
       } catch (error) {
-        console.error(colors.red('Failed to spawn Claude:'), (error as Error).message);
+        console.error(colors.red('Failed to spawn Ollama:'), (error as Error).message);
       }
     }),
   )
   .command('batch', new Command()
-    .description('Spawn multiple Claude instances from workflow')
+    .description('Spawn multiple Ollama/Gemma instances from workflow')
     .arguments('<workflow-file:string>')
+    .option('--model <model:string>', 'Gemma model to use', { default: 'gemma3n:e2b' })
+    .option('--host <host:string>', 'Ollama host', { default: 'localhost:11434' })
     .option('--dry-run', 'Show what would be executed without running')
     .action(async (options: any, workflowFile: string) => {
       try {
@@ -124,48 +128,46 @@ export const claudeCommand = new Command()
         }
         
         for (const task of workflow.tasks) {
-          const claudeArgs = [task.description || task.name];
+          const ollamaArgs = ['run', options.model];
           
-          // Add tools
-          if (task.tools) {
-            claudeArgs.push('--allowedTools', Array.isArray(task.tools) ? task.tools.join(',') : task.tools);
-          }
+          // Format task prompt
+          const prompt = `You are an AI assistant helping with development tasks. Complete this workflow task:
+
+Task: ${task.name || task.id}
+Description: ${task.description || task.name}
+${task.type ? `Type: ${task.type}` : ''}
+
+Please provide a detailed response with code, explanations, and any necessary steps.`;
           
-          // Add flags
-          if (task.skipPermissions) {
-            claudeArgs.push('--dangerously-skip-permissions');
-          }
-          
-          if (task.config) {
-            claudeArgs.push('--mcp-config', task.config);
-          }
+          ollamaArgs.push(prompt);
           
           if (options.dryRun) {
             console.log(colors.yellow(`\nDRY RUN - Task: ${task.name || task.id}`));
-            console.log(colors.gray(`claude ${claudeArgs.join(' ')}`));
+            console.log(colors.gray(`ollama ${ollamaArgs.join(' ')}`));
           } else {
-            console.log(colors.blue(`\nSpawning Claude for task: ${task.name || task.id}`));
+            console.log(colors.blue(`\nSpawning Ollama for task: ${task.name || task.id}`));
             
-            const claude = spawn('claude', claudeArgs, {
+            const ollama = spawn('ollama', ollamaArgs, {
               stdio: 'inherit',
               env: {
                 ...process.env,
-                CLAUDE_TASK_ID: task.id || generateId('task'),
-                CLAUDE_TASK_TYPE: task.type || 'general',
+                OLLAMA_HOST: options.host,
+                GEMMA_TASK_ID: task.id || generateId('task'),
+                GEMMA_TASK_TYPE: task.type || 'general',
               }
             });
             
             // Wait for completion if sequential
             if (!workflow.parallel) {
               await new Promise((resolve) => {
-                claude.on('exit', resolve);
+                ollama.on('exit', resolve);
               });
             }
           }
         }
         
         if (!options.dryRun && workflow.parallel) {
-          console.log(colors.green('\nAll Claude instances spawned in parallel mode'));
+          console.log(colors.green('\nAll Ollama instances spawned in parallel mode'));
         }
         
       } catch (error) {
